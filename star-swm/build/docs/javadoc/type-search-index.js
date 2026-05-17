@@ -1,1 +1,0 @@
-typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html","k":"18"},{"p":"dev.yanianz.star.swm","l":"AsPaperSWMAdapter"},{"p":"dev.yanianz.star.swm","l":"SlimeWorldAdapter","k":"10"},{"p":"dev.yanianz.star.swm","l":"SlimeWorldManager"},{"p":"dev.yanianz.star.swm","l":"SourbyCraftSWMAdapter"}];updateSearchResults();

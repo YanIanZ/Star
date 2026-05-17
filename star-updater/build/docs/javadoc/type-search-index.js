@@ -1,1 +1,0 @@
-typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html","k":"18"},{"p":"dev.yanianz.star.updater","l":"BlobBuildUpdater"},{"p":"dev.yanianz.star.updater","l":"BukkitUpdater"},{"p":"dev.yanianz.star.updater","l":"GitHubBuildsUpdater"},{"p":"dev.yanianz.star.updater","l":"PluginUpdater","k":"10"}];updateSearchResults();

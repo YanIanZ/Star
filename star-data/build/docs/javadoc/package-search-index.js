@@ -1,1 +1,0 @@
-packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html","k":"18"},{"l":"dev.yanianz.star.blocks"},{"l":"dev.yanianz.star.collections"},{"l":"dev.yanianz.star.data"},{"l":"dev.yanianz.star.data.persistent"}];updateSearchResults();
