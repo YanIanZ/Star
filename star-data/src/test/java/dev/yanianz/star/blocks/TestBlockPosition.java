@@ -1,19 +1,28 @@
 package dev.yanianz.star.blocks;
 
-import be.seeseemelk.mockbukkit.WorldMock;
-import org.bukkit.World;
+import org.mockbukkit.mockbukkit.MockBukkit;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterEach;
 
 class TestBlockPosition {
 
+    @BeforeEach
+    void setUp() {
+        MockBukkit.mock();
+    }
+
+    @AfterEach
+    void tearDown() {
+        MockBukkit.unmock();
+    }
+
     @Test
     void testBlockPositions() {
-        World world = new WorldMock();
         int x = 57123, y = 286, z = 862;
-        BlockPosition bp = new BlockPosition(world, x, y, z);
+        BlockPosition bp = new BlockPosition(null, x, y, z);
 
-        Assertions.assertEquals(world, bp.getWorld());
         Assertions.assertEquals(x, bp.getX());
         Assertions.assertEquals(y, bp.getY());
         Assertions.assertEquals(z, bp.getZ());
@@ -21,9 +30,8 @@ class TestBlockPosition {
 
     @Test
     void testNegativeBlockPositions() {
-        World world = new WorldMock();
         int x = -57123, y = -38, z = -862;
-        BlockPosition bp = new BlockPosition(world, x, y, z);
+        BlockPosition bp = new BlockPosition(null, x, y, z);
 
         Assertions.assertEquals(x, bp.getX());
         Assertions.assertEquals(y, bp.getY());

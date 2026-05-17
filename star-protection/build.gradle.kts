@@ -12,6 +12,6 @@ dependencies {
     compileOnly("com.github.RedProtect:RedProtect:7.7.3")
     compileOnly("com.github.BentoBoxWorld:BentoBox:BentoBox-1.20.1")
     compileOnly("com.github.Angeschossen:LandsAPI:6.29.12")
-    compileOnly("com.github.WiIIiam278:HuskTowns:3.0")
-    compileOnly("com.github.WiIIiam278:HuskClaims:1.0.2")
+    compileOnly("com.github.William278:HuskTowns:3.0")
+    compileOnly("com.github.William278:HuskClaims:1.0.2")
 }

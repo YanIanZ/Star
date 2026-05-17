@@ -9,7 +9,7 @@ include(
     "star-data",
     "star-inventories",
     "star-skins",
-    "star-protection",
+    // "star-protection", // Excluded: external plugin APIs not resolvable on public repos
     "star-recipes",
     "star-updater",
     "star-scheduling",

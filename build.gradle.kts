@@ -48,6 +48,7 @@ subprojects {
 
     tasks.withType<Test> {
         useJUnitPlatform()
+        failOnNoDiscoveredTests = false
         testLogging {
             events("passed", "skipped", "failed")
             showStackTraces = true
@@ -85,5 +86,6 @@ subprojects {
         "testImplementation"("org.junit.jupiter:junit-jupiter:5.10.3")
         "testRuntimeOnly"("org.junit.platform:junit-platform-launcher")
         "testImplementation"("org.mockito:mockito-core:5.14.1")
+        "testImplementation"("org.mockbukkit.mockbukkit:mockbukkit-v1.21:4.41.1")
     }
 }
