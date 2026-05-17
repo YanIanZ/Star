@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html","k":"18"},{"p":"dev.yanianz.star.recipes","l":"MinecraftRecipe"},{"p":"dev.yanianz.star.recipes","l":"RecipeSnapshot"}];updateSearchResults();

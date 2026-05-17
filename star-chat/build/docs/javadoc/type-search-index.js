@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html","k":"18"},{"p":"dev.yanianz.star.chat","l":"ChatInput"},{"p":"dev.yanianz.star.chat","l":"ChatInputHandler","k":"10"}];updateSearchResults();
