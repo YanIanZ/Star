@@ -1,0 +1,69 @@
+package dev.yanianz.star.items.nms;
+
+import java.lang.reflect.InvocationTargetException;
+import java.util.logging.Level;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
+
+import io.papermc.lib.PaperLib;
+import org.bukkit.inventory.ItemStack;
+
+import dev.yanianz.star.common.StarLogger;
+import dev.yanianz.star.versions.MinecraftVersion;
+
+public interface ItemNameAdapter {
+
+    @ParametersAreNonnullByDefault
+    @Nonnull
+    String getName(ItemStack item) throws IllegalAccessException, InvocationTargetException;
+
+    public static @Nullable ItemNameAdapter get() {
+        try {
+            if (MinecraftVersion.isMocked()) {
+                // Special case for MockBukkit
+                return new ItemNameAdapterMockBukkit();
+            }
+
+            MinecraftVersion version = MinecraftVersion.get();
+
+            if (version.isAtLeast(1, 20, 4) && PaperLib.isPaper()) {
+                return new ItemNameAdapterPaper();
+            }
+
+            if (version.isAtLeast(1, 21, 11)) {
+                return new ItemNameAdapter21v11();
+            }
+            if (version.isAtLeast(1, 21, 4)) {
+                return new ItemNameAdapter21v4();
+            }
+            if (version.isAtLeast(1, 21)) {
+                return new ItemNameAdapter21();
+            }
+            if (version.isAtLeast(1, 20, 5)) {
+                return new ItemNameAdapter20v5();
+            } else if (version.isAtLeast(1, 20)) {
+                return new ItemNameAdapter20();
+            } else if (version.isAtLeast(1, 19)) {
+                return new ItemNameAdapter19();
+            } else if (version.isAtLeast(1, 18, 2)) {
+                return new ItemNameAdapter18v2();
+            } else if (version.isAtLeast(1, 18)) {
+                // 1.18+ mappings
+                return new ItemNameAdapter18();
+            } else if (version.isAtLeast(1, 17)) {
+                // 1.17+ mappings
+                return new ItemNameAdapter17();
+            } else {
+                // Old mappings
+                return new ItemNameAdapterBefore17();
+            }
+        } catch (Exception x) {
+            StarLogger logger = new StarLogger("items");
+            logger.log(Level.SEVERE, "Failed to detect items nbt methods", x);
+            return null;
+        }
+
+    }
+}

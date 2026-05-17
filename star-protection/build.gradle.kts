@@ -1,0 +1,17 @@
+dependencies {
+    compileOnly(project(":star-common"))
+    // Protection plugin APIs (all compileOnly)
+    compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.0.9")
+    compileOnly("com.sk89q.worldedit:worldedit-bukkit:7.2.17")
+    compileOnly("com.github.IntellectualSites.PlotSquared:PlotSquared-Bukkit:7.3.6")
+    compileOnly("net.coreprotect:coreprotect:21.3")
+    compileOnly("com.github.GriefPrevention:GriefPrevention:16.18.2")
+    compileOnly("com.github.brcdev-minecraft:LWC-Extended:2.3.0")
+    compileOnly("com.github.FactionsUUID:factions:1.6.9.5")
+    compileOnly("com.github.TownyAdvanced:Towny:0.100.0.0")
+    compileOnly("com.github.RedProtect:RedProtect:7.7.3")
+    compileOnly("com.github.BentoBoxWorld:BentoBox:BentoBox-1.20.1")
+    compileOnly("com.github.Angeschossen:LandsAPI:6.29.12")
+    compileOnly("com.github.WiIIiam278:HuskTowns:3.0")
+    compileOnly("com.github.WiIIiam278:HuskClaims:1.0.2")
+}
