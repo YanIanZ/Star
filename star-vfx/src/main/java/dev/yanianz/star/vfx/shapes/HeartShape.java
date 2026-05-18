@@ -1,0 +1,62 @@
+package dev.yanianz.star.vfx.shapes;
+
+import dev.yanianz.star.vfx.ParticleShape;
+import org.bukkit.Color;
+import org.bukkit.Location;
+import org.bukkit.Particle;
+import org.bukkit.World;
+import org.bukkit.entity.Player;
+import javax.annotation.Nonnull;
+import java.util.List;
+
+public final class HeartShape implements ParticleShape {
+    private final Particle particle;
+    private final int count;
+    private final Location location;
+    private final double scale;
+    private final double offsetX, offsetY, offsetZ;
+    private final double speed;
+    private final Color color;
+    private final List<Player> viewers;
+
+    public HeartShape(@Nonnull Particle particle, int count, @Nonnull Location location, double scale,
+                      double offsetX, double offsetY, double offsetZ, double speed,
+                      Color color, @Nonnull List<Player> viewers) {
+        this.particle = particle; this.count = count; this.location = location;
+        this.scale = scale / 16.0;
+        this.offsetX = offsetX; this.offsetY = offsetY; this.offsetZ = offsetZ;
+        this.speed = speed; this.color = color; this.viewers = viewers;
+    }
+
+    @Override
+    public void play() {
+        World world = location.getWorld();
+        if (world == null) return;
+        Particle.DustOptions options = color != null ? new Particle.DustOptions(color, 1) : null;
+        for (int i = 0; i < count; i++) {
+            double t = 2 * Math.PI * i / Math.max(1, count - 1);
+            double x = 16 * Math.pow(Math.sin(t), 3);
+            double y = 13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t);
+            Location loc = location.clone().add(x * scale, y * scale, 0);
+            spawn(world, loc, options);
+        }
+    }
+
+    private void spawn(World world, Location loc, Particle.DustOptions options) {
+        if (viewers.isEmpty()) {
+            if (options != null && particle == Particle.DUST)
+                world.spawnParticle(particle, loc, 1, offsetX, offsetY, offsetZ, speed, options);
+            else world.spawnParticle(particle, loc, 1, offsetX, offsetY, offsetZ, speed);
+        } else {
+            for (Player v : viewers) {
+                if (options != null && particle == Particle.DUST)
+                    v.spawnParticle(particle, loc, 1, offsetX, offsetY, offsetZ, speed, options);
+                else v.spawnParticle(particle, loc, 1, offsetX, offsetY, offsetZ, speed);
+            }
+        }
+    }
+
+    @Override @Nonnull public Particle getParticle() { return particle; }
+    @Override public int getCount() { return count; }
+    @Override @Nonnull public Location getLocation() { return location; }
+}

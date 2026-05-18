@@ -15,5 +15,6 @@ include(
     "star-scheduling",
     "star-swm",
     "star-gui",
+    "star-vfx",
     "star-api"
 )

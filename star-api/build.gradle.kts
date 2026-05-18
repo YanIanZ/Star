@@ -19,6 +19,7 @@ dependencies {
     implementation(project(":star-swm"))
 
     implementation(project(":star-gui"))
+    implementation(project(":star-vfx"))
     compileOnly("com.mojang:authlib:6.0.52")
 }
 
