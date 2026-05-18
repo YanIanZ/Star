@@ -15,8 +15,8 @@ import java.util.logging.Logger;
 public final class SlimeWorldManager {
 
     private static final Logger LOGGER = Logger.getLogger("star:swm");
-    private static Object cachedApi;
-    private static boolean cachedAvailable;
+    private static volatile Object cachedApi;
+    private static volatile boolean cachedAvailable;
 
     private static final String SOURBYCRAFT_API = "dev.iyanz.sourbycraft.swm.api.AdvancedSlimePaperAPI";
     private static final String ASPAPER_API = "com.infernalsuite.asp.api.AdvancedSlimePaperAPI";
