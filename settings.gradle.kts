@@ -23,5 +23,8 @@ include(
     "star-database",
     "star-combat",
     "star-npc",
+    "star-cache",
+    "star-misc",
+    "star-integrations",
     "star-api"
 )

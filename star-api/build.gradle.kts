@@ -27,6 +27,9 @@ dependencies {
     implementation(project(":star-database"))
     implementation(project(":star-combat"))
     implementation(project(":star-npc"))
+    implementation(project(":star-cache"))
+    implementation(project(":star-misc"))
+    implementation(project(":star-integrations"))
     compileOnly("com.mojang:authlib:6.0.52")
 }
 
