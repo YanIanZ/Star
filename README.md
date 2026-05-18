@@ -29,7 +29,7 @@
 
 ---
 
-> **Originally forked from Dough** by [TheBusyBiscuit](https://github.com/Slimefun/dough) — rebranded, modernized, and extended with new modules & Java 25 support.
+> **Originally forked from Dough** by [Slimefun](https://github.com/Slimefun/dough) — rebranded, modernized, and extended with new modules & Java 25 support.
 
 Star bundles everything you need to build plugins faster: reflection, config, chat, data, skins, items, inventories, protection, recipes, scheduling, auto-updates, and SlimeWorldManager — all under one cohesive API.
 
