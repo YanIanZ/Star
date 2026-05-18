@@ -6,6 +6,11 @@ import javax.annotation.Nonnull;
 import java.util.*;
 import java.util.logging.Level;
 
+/**
+ * Manages economy provider registration and auto-detection.
+ * Use {@link #registerProvider(EconomyProvider)} to add providers,
+ * then {@link #detectAndEnable()} to activate the first available one.
+ */
 public final class EconomyManager {
     private final List<EconomyProvider> providers = new ArrayList<>();
     private EconomyProvider primaryProvider;

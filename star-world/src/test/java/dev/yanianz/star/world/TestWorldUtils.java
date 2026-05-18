@@ -111,4 +111,67 @@ class TestWorldUtils {
         assertEquals(5.0, center.getY(), 0.1);
         assertEquals(5.5, center.getZ(), 0.1);
     }
+
+    @Test @DisplayName("ChunkPurger gets chunks in region")
+    void chunkPurger() {
+        Location c1 = new Location(world, 0, 64, 0);
+        Location c2 = new Location(world, 47, 64, 47);
+        var chunks = ChunkPurger.getChunksInRegion(c1, c2);
+        assertFalse(chunks.isEmpty());
+        assertTrue(chunks.size() >= 4);
+    }
+
+    @Test @DisplayName("TerrainSampler queries")
+    void terrainSampler() {
+        assertTrue(world.getMaxHeight() > 0);
+        assertFalse(TerrainSampler.isWalkable(new Location(world, 0, 1, 0)));
+    }
+
+    @Test @DisplayName("SpawnPointFinder does not throw")
+    void spawnPointFinderInvalid() {
+        assertDoesNotThrow(() -> SpawnPointFinder.findSafe(new Location(world, 0, 64, 0), 1.0, 10));
+    }
+
+    @Test @DisplayName("SchematicUtils width/height/length")
+    void schematicUtilsDimensions() throws Exception {
+        java.io.File tmp = new java.io.File(System.getProperty("java.io.tmpdir"), "test-schem-" + System.nanoTime() + ".tmp");
+        tmp.deleteOnExit();
+        Location c1 = new Location(world, 0, 64, 0);
+        Location c2 = new Location(world, 2, 65, 2);
+        SchematicUtils.save(c1, c2, tmp);
+        SchematicUtils.SchematicData data = SchematicUtils.load(tmp);
+        assertEquals(3, data.width());
+        assertEquals(2, data.height());
+        assertEquals(3, data.length());
+    }
+
+    @Test @DisplayName("StructurePlacer getters")
+    void structurePlacer() throws Exception {
+        java.io.File tmp = new java.io.File(System.getProperty("java.io.tmpdir"), "test-schem-" + System.nanoTime() + ".tmp");
+        tmp.deleteOnExit();
+        SchematicUtils.save(new Location(world, 0, 64, 0), new Location(world, 2, 65, 2), tmp);
+        StructurePlacer placer = StructurePlacer.load(tmp);
+        assertEquals(3, placer.getWidth());
+        assertEquals(2, placer.getHeight());
+        assertEquals(3, placer.getLength());
+        assertThrows(IllegalStateException.class, placer::place);
+    }
+
+    @Test @DisplayName("RegionCopier record fields")
+    void regionCopierRecord() {
+        RegionCopier.CopyResult result = new RegionCopier.CopyResult(0, 3, 64, 67, 0, 3, 10, 0, 10, 64);
+        assertEquals(0, result.minX());
+        assertEquals(3, result.maxX());
+        assertEquals(64, result.minY());
+        assertEquals(67, result.maxY());
+        assertEquals(10, result.dx());
+        assertEquals(64, result.blocks());
+    }
+
+    @Test @DisplayName("BlockPopulator types")
+    void blockPopulatorTypes() {
+        assertDoesNotThrow(() -> BlockPopulator.class.getMethod("populateOreVein", org.bukkit.Location.class, org.bukkit.Material.class, double.class, int.class));
+        assertDoesNotThrow(() -> BlockPopulator.class.getMethod("populateTree", org.bukkit.Location.class, org.bukkit.Material.class, org.bukkit.Material.class, int.class));
+        assertDoesNotThrow(() -> BlockPopulator.class.getMethod("populateFlower", org.bukkit.Location.class));
+    }
 }

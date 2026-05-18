@@ -13,6 +13,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Fluent builder for constructing particle shapes and effects.
+ * Two entry points: {@link #shape(ShapeType)} for one-shot particle shapes and
+ * {@link #effect(EffectType)} for animated effects.
+ * Call {@link #play()} to spawn shapes immediately or {@link #build()} to get a schedulable {@link ParticleEffect}.
+ */
 public final class ParticleBuilder {
 
     private final ShapeType shapeType;
@@ -49,41 +55,70 @@ public final class ParticleBuilder {
         this.shapeType = null;
     }
 
+    /**
+     * Returns a new ParticleBuilder for a one-shot particle shape of the given type.
+     */
     @Nonnull
     public static ParticleBuilder shape(@Nonnull ShapeType type) {
         return new ParticleBuilder(type);
     }
 
+    /**
+     * Returns a new ParticleBuilder for an animated effect of the given type.
+     */
     @Nonnull
     public static ParticleBuilder effect(@Nonnull EffectType type) {
         return new ParticleBuilder(type);
     }
 
+    /** Sets the particle type. */
     @Nonnull public ParticleBuilder particle(@Nonnull Particle p) { this.particle = p; return this; }
+    /** Sets the number of particles. */
     @Nonnull public ParticleBuilder count(int c) { this.count = c; return this; }
+    /** Sets the spawn location. */
     @Nonnull public ParticleBuilder at(@Nonnull Location loc) { this.location = loc; return this; }
+    /** Sets an entity to follow for trail effects. */
     @Nonnull public ParticleBuilder follow(@Nonnull Entity e) { this.entity = e; return this; }
+    /** Sets the radius of the shape or effect. */
     @Nonnull public ParticleBuilder radius(double r) { this.radius = r; return this; }
+    /** Sets the length for line or wave shapes. */
     @Nonnull public ParticleBuilder length(double l) { this.length = l; return this; }
+    /** Sets the height for shapes that support it (helix, cone, cylinder). */
     @Nonnull public ParticleBuilder height(double h) { this.height = h; return this; }
+    /** Sets the number of rotations for helix shapes. */
     @Nonnull public ParticleBuilder rotations(int r) { this.rotations = r; return this; }
+    /** Sets the wave amplitude. */
     @Nonnull public ParticleBuilder amplitude(double a) { this.amplitude = a; return this; }
+    /** Sets the wave frequency. */
     @Nonnull public ParticleBuilder frequency(double f) { this.frequency = f; return this; }
+    /** Sets the starting angle for arc/rainbow shapes. */
     @Nonnull public ParticleBuilder startAngle(double a) { this.startAngle = a; return this; }
+    /** Sets the ending angle for arc/rainbow shapes. */
     @Nonnull public ParticleBuilder endAngle(double a) { this.endAngle = a; return this; }
+    /** Sets the number of points for star shapes. */
     @Nonnull public ParticleBuilder points(int p) { this.points = p; return this; }
+    /** Sets the tick interval between effect iterations. */
     @Nonnull public ParticleBuilder interval(int i) { this.interval = i; return this; }
+    /** Sets the effect duration in ticks. */
     @Nonnull public ParticleBuilder duration(int d) { this.duration = d; return this; }
+    /** Sets the particle color (for colorable particles). */
     @Nonnull public ParticleBuilder color(@Nonnull Color c) { this.color = c; return this; }
+    /** Sets the offset from the spawn location. */
     @Nonnull public ParticleBuilder offset(double x, double y, double z) { this.offsetX = x; this.offsetY = y; this.offsetZ = z; return this; }
+    /** Sets the particle speed. */
     @Nonnull public ParticleBuilder speed(double s) { this.speed = s; return this; }
+    /** Sets the players who will see the particles. */
     @Nonnull public ParticleBuilder viewers(@Nonnull Player... v) { Collections.addAll(this.viewers, v); return this; }
 
+    /** Creates and plays the configured particle shape immediately. */
     public void play() {
         if (location == null) throw new IllegalStateException("Location must be set via .at() before playing");
         createShape().play();
     }
 
+    /**
+     * Creates and returns a schedulable ParticleEffect for the configured effect.
+     */
     @Nonnull
     public ParticleEffect build() {
         return createEffect();

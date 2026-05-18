@@ -7,6 +7,9 @@ import javax.annotation.Nonnull;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * Loads and places schematic files at locations with optional rotation and mirroring.
+ */
 public final class StructurePlacer {
     private Location location;
     private StructureRotation rotation = StructureRotation.NONE;

@@ -13,6 +13,11 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.function.Consumer;
 
+/**
+ * Central command registration manager.
+ * Supports two registration styles: annotation-based ({@link #register(Object)})
+ * and builder-based ({@link #builder(String)}).
+ */
 public final class CommandManager {
     private final Plugin plugin;
     private final StarLogger logger;
@@ -26,6 +31,9 @@ public final class CommandManager {
 
     @Nonnull public CooldownManager cooldowns() { return cooldowns; }
 
+    /**
+     * Creates a new {@link CommandBuilder} for constructing a command fluently.
+     */
     @Nonnull public CommandBuilder builder(@Nonnull String name) {
         CommandBuilder b = new CommandBuilder(name);
         b.setManager(this);
@@ -52,6 +60,10 @@ public final class CommandManager {
         }
     }
 
+    /**
+     * Registers a command object by scanning its {@link Command}, {@link Arg},
+     * and {@link TabComplete} annotations.
+     */
     public void register(@Nonnull Object obj) {
         Class<?> clazz = obj.getClass();
         Command typeAnnotation = clazz.getAnnotation(Command.class);

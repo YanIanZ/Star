@@ -6,6 +6,11 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * Tracks per-player command cooldowns.
+ * Use {@link #setCooldown(String, Player, int)} to start a cooldown
+ * and {@link #isOnCooldown(String, Player)} to check.
+ */
 public final class CooldownManager {
     private final Map<String, Map<UUID, Long>> cooldowns = new ConcurrentHashMap<>();
 
@@ -14,6 +19,9 @@ public final class CooldownManager {
             .put(player.getUniqueId(), System.currentTimeMillis() + seconds * 1000L);
     }
 
+    /**
+     * Returns the remaining cooldown time in seconds, or {@code 0} if not on cooldown.
+     */
     public long getRemaining(@Nonnull String command, @Nonnull Player player) {
         Map<UUID, Long> map = cooldowns.get(command);
         if (map == null) return 0;

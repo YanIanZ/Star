@@ -5,6 +5,9 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import javax.annotation.Nonnull;
 
+/**
+ * Copies blocks and block data from one region to another location.
+ */
 public final class RegionCopier {
     private RegionCopier() {}
 

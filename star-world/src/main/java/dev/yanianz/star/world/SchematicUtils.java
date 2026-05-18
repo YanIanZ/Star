@@ -13,7 +13,7 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
 /**
- * Simple schematic format reader/writer.
+ * Utility for saving and loading region data in a simple binary schematic format.
  * Format: [width(short)][height(short)][length(short)][materials...][blockData...]
  */
 public final class SchematicUtils {

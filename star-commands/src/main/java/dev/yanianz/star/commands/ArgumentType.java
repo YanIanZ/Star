@@ -12,9 +12,19 @@ import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+/**
+ * Type-safe argument parser with built-in tab completion.
+ * Predefined instances for common types ({@link #INTEGER}, {@link #PLAYER},
+ * {@link #MATERIAL}, etc.). Use {@link #ofEnum(Class)} for enum types
+ * or {@link #custom(Function, List)} for custom parsers.
+ */
 public final class ArgumentType<T> {
+    private static final Logger LOGGER = Logger.getLogger(ArgumentType.class.getName());
+
     public static final ArgumentType<Integer> INTEGER = new ArgumentType<>(Integer::parseInt, List.of("0", "1", "10"));
     public static final ArgumentType<Double> DOUBLE = new ArgumentType<>(Double::parseDouble, List.of("0.0", "1.0"));
     public static final ArgumentType<String> STRING = new ArgumentType<>(s -> s, List.of());
@@ -41,7 +51,7 @@ public final class ArgumentType<T> {
 
     @Nullable
     public T parse(@Nonnull String input) {
-        try { return parser.apply(input); } catch (Exception e) { return null; }
+        try { return parser.apply(input); } catch (Exception e) { LOGGER.log(Level.FINE, "Failed to parse '" + input + "' as " + this.getClass().getSimpleName(), e); return null; }
     }
 
     @Nonnull

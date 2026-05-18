@@ -11,6 +11,10 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Economy provider implementation using the Vault API.
+ * Delegates all operations to Vault's {@link net.milkbowl.vault.economy.Economy} service.
+ */
 public final class VaultEconomyProvider extends AbstractEconomyProvider {
 
     private Economy vaultEconomy;

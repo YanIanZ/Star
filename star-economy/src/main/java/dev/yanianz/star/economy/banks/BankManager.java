@@ -6,6 +6,10 @@ import org.bukkit.OfflinePlayer;
 import javax.annotation.Nonnull;
 import java.util.List;
 
+/**
+ * Provides convenience methods for bank operations,
+ * delegating to the underlying {@link EconomyProvider}.
+ */
 public final class BankManager {
     private final EconomyProvider provider;
 

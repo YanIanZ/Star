@@ -4,6 +4,10 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 
+/**
+ * Parses raw string arguments into typed values based on {@link CommandNode.ArgDef} definitions.
+ * Also provides tab completion for argument types.
+ */
 public final class ArgumentParser {
     private ArgumentParser() {}
 

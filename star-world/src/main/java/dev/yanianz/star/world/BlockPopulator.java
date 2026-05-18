@@ -7,9 +7,13 @@ import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import javax.annotation.Nonnull;
 
+/**
+ * Populates blocks in the world: ore veins, trees, flowers, and other decorations.
+ */
 public final class BlockPopulator {
     private BlockPopulator() {}
 
+    /** Generates an ore vein of the given type within the specified radius. Returns the number of blocks placed. */
     public static int populateOreVein(@Nonnull Location center, @Nonnull Material oreType, double radius, int maxBlocks) {
         World world = center.getWorld();
         int[] placed = {0};
@@ -22,6 +26,7 @@ public final class BlockPopulator {
         return placed[0];
     }
 
+    /** Places a tree at the given base location using the specified log and leaf materials. */
     public static void populateTree(@Nonnull Location base, @Nonnull Material logMaterial, @Nonnull Material leafMaterial, int height) {
         World world = base.getWorld();
         int bx = base.getBlockX(), by = base.getBlockY(), bz = base.getBlockZ();
@@ -35,6 +40,7 @@ public final class BlockPopulator {
         }
     }
 
+    /** Places a random flower on the block above the given ground location if valid. */
     public static void populateFlower(@Nonnull Location ground) {
         Block above = ground.clone().add(0, 1, 0).getBlock();
         if (above.isEmpty() && ground.getBlock().getType().isSolid()) {

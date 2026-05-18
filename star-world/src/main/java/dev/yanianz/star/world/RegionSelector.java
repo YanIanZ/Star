@@ -13,6 +13,10 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 
+/**
+ * Wand-based cubic region selector.
+ * Players left-click to set position 1 and right-click for position 2.
+ */
 public final class RegionSelector implements Listener {
     private final Map<UUID, Location> pos1 = new HashMap<>();
     private final Map<UUID, Location> pos2 = new HashMap<>();

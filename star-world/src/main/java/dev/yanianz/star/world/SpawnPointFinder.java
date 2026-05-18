@@ -7,6 +7,9 @@ import org.bukkit.entity.Player;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+/**
+ * Finds safe spawn locations for players by sampling random positions within a radius.
+ */
 public final class SpawnPointFinder {
     private SpawnPointFinder() {}
 

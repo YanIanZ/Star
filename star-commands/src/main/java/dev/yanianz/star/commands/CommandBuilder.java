@@ -5,6 +5,10 @@ import javax.annotation.Nonnull;
 import java.util.*;
 import java.util.function.Consumer;
 
+/**
+ * Fluent builder for constructing command nodes.
+ * Use via {@link CommandManager#builder(String)}.
+ */
 public final class CommandBuilder {
     private final String name;
     private final List<String> aliases = new ArrayList<>();

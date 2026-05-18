@@ -6,6 +6,10 @@ import javax.annotation.Nonnull;
 import java.util.*;
 import java.util.function.Consumer;
 
+/**
+ * Groups multiple {@link CommandNode}s under a single root command.
+ * Handles subcommand routing, permission checks, and argument parsing.
+ */
 public final class CompositeCommand {
     private final Plugin plugin;
     private final String name;

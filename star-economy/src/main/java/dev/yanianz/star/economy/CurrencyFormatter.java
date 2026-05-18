@@ -4,6 +4,10 @@ import javax.annotation.Nonnull;
 import java.text.NumberFormat;
 import java.util.Locale;
 
+/**
+ * Utility class for formatting currency amounts.
+ * Supports full locale-aware format, short K/M format, and raw number formatting.
+ */
 public final class CurrencyFormatter {
     private CurrencyFormatter() {}
 

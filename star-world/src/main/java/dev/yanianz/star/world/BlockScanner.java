@@ -6,9 +6,13 @@ import org.bukkit.block.Block;
 import javax.annotation.Nonnull;
 import java.util.function.Consumer;
 
+/**
+ * Iterates over blocks in regions (box, sphere, chunk) applying a consumer callback to each block.
+ */
 public final class BlockScanner {
     private BlockScanner() {}
 
+    /** Iterates over every block in the axis-aligned box between two corner locations. */
     public static void scanBox(@Nonnull Location corner1, @Nonnull Location corner2, @Nonnull Consumer<Block> consumer) {
         World world = corner1.getWorld();
         int minX = Math.min(corner1.getBlockX(), corner2.getBlockX());
@@ -23,6 +27,7 @@ public final class BlockScanner {
                     consumer.accept(world.getBlockAt(x, y, z));
     }
 
+    /** Iterates over every block in the given CuboidRegion. */
     public static void scanBox(@Nonnull CuboidRegion region, @Nonnull Consumer<Block> consumer) {
         World world = region.getWorld();
         for (int x = region.getMinX(); x <= region.getMaxX(); x++)
@@ -31,6 +36,7 @@ public final class BlockScanner {
                     consumer.accept(world.getBlockAt(x, y, z));
     }
 
+    /** Iterates over every block within the given radius of a center location. */
     public static void scanSphere(@Nonnull Location center, double radius, @Nonnull Consumer<Block> consumer) {
         World world = center.getWorld();
         int cx = center.getBlockX(), cy = center.getBlockY(), cz = center.getBlockZ();
@@ -42,6 +48,7 @@ public final class BlockScanner {
                         consumer.accept(world.getBlockAt(x, y, z));
     }
 
+    /** Iterates over every block in the chunk containing the given location. */
     public static void scanChunk(@Nonnull Location loc, @Nonnull Consumer<Block> consumer) {
         World world = loc.getWorld();
         int cx = loc.getBlockX() >> 4, cz = loc.getBlockZ() >> 4;

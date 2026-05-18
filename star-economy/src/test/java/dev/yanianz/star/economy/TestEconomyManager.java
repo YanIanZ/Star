@@ -2,6 +2,7 @@ package dev.yanianz.star.economy;
 
 import dev.yanianz.star.economy.banks.Bank;
 import dev.yanianz.star.economy.banks.BankManager;
+import dev.yanianz.star.economy.providers.AbstractEconomyProvider;
 import org.bukkit.OfflinePlayer;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -81,5 +82,87 @@ class TestEconomyManager {
         assertEquals("coins", coins.id());
         assertEquals("Coins", coins.name());
         assertEquals("\u26C3", coins.symbol());
+    }
+
+    @Test @DisplayName("EconomyProvider default methods work")
+    void economyProviderDefaults() {
+        EconomyProvider provider = new AbstractEconomyProvider() {
+            @Override public String getName() { return "test"; }
+            @Override public boolean hasAccount(OfflinePlayer p) { return true; }
+            @Override public double getBalance(OfflinePlayer p) { return 100.0; }
+            @Override public boolean setBalance(OfflinePlayer p, double amount) { return true; }
+        };
+
+        assertFalse(provider.isEnabled());
+        assertEquals("test", provider.getName());
+        assertEquals("Dollar", provider.currencyNameSingular());
+        assertEquals("Dollars", provider.currencyNamePlural());
+        assertEquals("$", provider.currencySymbol());
+        assertFalse(provider.hasBankSupport());
+        assertTrue(provider.getBanks().isEmpty());
+        assertTrue(provider.getCurrencies().isEmpty());
+        assertEquals(0.0, provider.getBankBalance("any"));
+    }
+
+    @Test @DisplayName("EconomyProvider custom currency defaults")
+    void economyProviderCustomCurrency() {
+        EconomyProvider provider = new AbstractEconomyProvider() {
+            @Override public String getName() { return "custom"; }
+            @Override public boolean hasAccount(OfflinePlayer p) { return true; }
+            @Override public double getBalance(OfflinePlayer p) { return 50.0; }
+            @Override public boolean setBalance(OfflinePlayer p, double amount) { return true; }
+        };
+        CurrencyType coins = new CurrencyType("coins", "Coins", "C");
+        assertEquals(50.0, provider.getBalance(null, coins));
+    }
+
+    @Test @DisplayName("BankManager delegates correctly")
+    void bankManagerDelegation() {
+        EconomyProvider provider = new AbstractEconomyProvider() {
+            @Override public String getName() { return "banktest"; }
+            @Override public boolean hasAccount(OfflinePlayer p) { return true; }
+            @Override public double getBalance(OfflinePlayer p) { return 0; }
+            @Override public boolean setBalance(OfflinePlayer p, double amount) { return true; }
+        };
+        BankManager bm = new BankManager(provider);
+
+        TransactionResult create = bm.create("MyBank", null);
+        assertFalse(create.success());
+        assertEquals("Bank not supported", create.message());
+
+        assertEquals(0.0, bm.getBalance("MyBank"));
+        assertTrue(bm.getBanks().isEmpty());
+
+        TransactionResult deposit = bm.deposit("MyBank", 100);
+        assertFalse(deposit.success());
+    }
+
+    @Test @DisplayName("Bank members work")
+    void bankMembers() {
+        UUID ownerId = UUID.randomUUID();
+        UUID memberId = UUID.randomUUID();
+        Bank bank = new Bank("Test", ownerId);
+        assertTrue(bank.getMemberIds().isEmpty());
+        bank.addMember(memberId);
+        assertEquals(1, bank.getMemberIds().size());
+        assertTrue(bank.getMemberIds().contains(memberId));
+        bank.removeMember(memberId);
+        assertTrue(bank.getMemberIds().isEmpty());
+        assertFalse(bank.getMemberIds().contains(memberId));
+    }
+
+    @Test @DisplayName("Bank isOwner and isMember work")
+    void bankOwnerMember() {
+        org.mockbukkit.mockbukkit.MockBukkit.mock();
+        org.mockbukkit.mockbukkit.ServerMock server = org.mockbukkit.mockbukkit.MockBukkit.getOrCreateMock();
+        org.mockbukkit.mockbukkit.entity.PlayerMock owner = server.addPlayer("Owner");
+        org.mockbukkit.mockbukkit.entity.PlayerMock member = server.addPlayer("Member");
+
+        Bank bank = new Bank("CoolBank", owner.getUniqueId());
+        bank.addMember(member.getUniqueId());
+        assertTrue(bank.isOwner(owner));
+        assertFalse(bank.isOwner(member));
+        assertFalse(bank.isMember(owner));
+        assertTrue(bank.isMember(member));
     }
 }

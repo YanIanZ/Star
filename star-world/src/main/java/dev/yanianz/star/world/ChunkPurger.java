@@ -9,9 +9,13 @@ import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+/**
+ * Enumerates and processes chunks within a region.
+ */
 public final class ChunkPurger {
     private ChunkPurger() {}
 
+    /** Applies a consumer to each loaded chunk in the region. Returns the number of chunks processed. */
     public static int purgeRegion(@Nonnull Location pos1, @Nonnull Location pos2, @Nonnull Consumer<Chunk> perChunk) {
         World world = pos1.getWorld();
         int minCX = Math.min(pos1.getBlockX(), pos2.getBlockX()) >> 4;
@@ -34,6 +38,7 @@ public final class ChunkPurger {
         return count;
     }
 
+    /** Returns the set of ChunkCoord entries that overlap the given region. */
     @Nonnull
     public static Set<ChunkCoord> getChunksInRegion(@Nonnull Location pos1, @Nonnull Location pos2) {
         int minCX = Math.min(pos1.getBlockX(), pos2.getBlockX()) >> 4;
