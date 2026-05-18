@@ -5,11 +5,9 @@ plugins {
 }
 
 group = "dev.yanianz"
-    version = "1.0.1"
 
 allprojects {
     group = "dev.yanianz"
-version = "1.0.1"
 
     repositories {
         mavenCentral()
@@ -66,8 +64,8 @@ subprojects {
                 name = "GitHubPackages"
                 url = uri("https://maven.pkg.github.com/yanianz/star")
                 credentials {
-                    username = System.getenv("GITHUB_ACTOR")
-                    password = System.getenv("GITHUB_TOKEN")
+                    username = System.getenv("GITHUB_ACTOR") ?: ""
+                    password = System.getenv("GITHUB_TOKEN") ?: ""
                 }
             }
         }
