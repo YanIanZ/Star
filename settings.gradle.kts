@@ -26,5 +26,7 @@ include(
     "star-cache",
     "star-misc",
     "star-integrations",
+    "star-packet",
+    "star-test",
     "star-api"
 )

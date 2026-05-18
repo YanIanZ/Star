@@ -30,6 +30,8 @@ dependencies {
     implementation(project(":star-cache"))
     implementation(project(":star-misc"))
     implementation(project(":star-integrations"))
+    implementation(project(":star-packet"))
+    implementation(project(":star-test"))
     compileOnly("com.mojang:authlib:6.0.52")
 }
 
