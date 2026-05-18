@@ -23,6 +23,10 @@ dependencies {
     implementation(project(":star-economy"))
     implementation(project(":star-commands"))
     implementation(project(":star-world"))
+    implementation(project(":star-holograms"))
+    implementation(project(":star-database"))
+    implementation(project(":star-combat"))
+    implementation(project(":star-npc"))
     compileOnly("com.mojang:authlib:6.0.52")
 }
 
