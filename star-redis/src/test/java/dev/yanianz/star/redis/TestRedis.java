@@ -48,4 +48,14 @@ class TestRedis {
         assertEquals(cfg, mgr.getConfig());
         assertFalse(mgr.isConnected());
     }
+
+    @Test @DisplayName("RedisManager operations API exists")
+    void managerOperations() {
+        RedisConfig cfg = RedisConfig.defaults("localhost");
+        RedisManager mgr = new RedisManager(null, cfg);
+        assertFalse(mgr.isConnected());
+        assertNull(mgr.get("key"));
+        mgr.del("key");
+        assertFalse(mgr.exists("key"));
+    }
 }

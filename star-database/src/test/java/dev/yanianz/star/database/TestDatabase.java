@@ -52,4 +52,10 @@ class TestDatabase {
         assertDoesNotThrow(() -> new dev.yanianz.star.database.providers.SQLiteProvider(new java.io.File("test.db")));
         assertDoesNotThrow(() -> new dev.yanianz.star.database.providers.MySQLProvider("localhost", 3306, "test", "root", ""));
     }
+
+    @Test @DisplayName("MongoProvider constructors work")
+    void mongoProvider() {
+        assertDoesNotThrow(() -> new dev.yanianz.star.database.providers.MongoProvider("localhost", 27017, "test", "admin", "pass"));
+        assertDoesNotThrow(() -> new dev.yanianz.star.database.providers.MongoProvider("mongodb://localhost:27017/test", "test"));
+    }
 }

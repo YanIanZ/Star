@@ -1,10 +1,7 @@
 package dev.yanianz.star.redis;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
@@ -22,5 +19,7 @@ public final class RedisPubSub {
     }
 
     public void publish(@Nonnull String channel, @Nonnull String message) { redis.publish(channel, message); }
-    @Nonnull public Set<String> getChannels() { return handlers.keySet(); }
+
+    @Nonnull
+    public Set<String> getChannels() { return handlers.keySet(); }
 }

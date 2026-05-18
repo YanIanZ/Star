@@ -35,7 +35,7 @@ public final class MySQLProvider implements DatabaseProvider {
     public QueryResult query(@Nonnull String sql, Object... params) throws SQLException {
         PreparedStatement ps = pool.getConnection().prepareStatement(sql);
         prepare(ps, params);
-        return new QueryResult(ps.executeQuery());
+        return new JdbcQueryResult(ps.executeQuery());
     }
 
     @Override

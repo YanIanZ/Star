@@ -12,9 +12,22 @@ public final class RedisCache<V> {
         this.namespace = namespace;
     }
 
-    @Nullable public V get(@Nonnull String key) { return null; }
-    public void set(@Nonnull String key, @Nonnull String value) { redis.set(namespace + ":" + key, value); }
-    public void del(@Nonnull String key) { redis.del(namespace + ":" + key); }
-    public boolean exists(@Nonnull String key) { return redis.exists(namespace + ":" + key); }
-    @Nonnull public String getNamespace() { return namespace; }
+    @Nullable
+    public String getRaw(@Nonnull String key) { return redis.get(key(key)); }
+
+    public void setRaw(@Nonnull String key, @Nonnull String value) { redis.set(key(key), value); }
+
+    public void setRaw(@Nonnull String key, @Nonnull String value, int ttlSeconds) {
+        redis.set(key(key), value);
+        redis.expire(key(key), ttlSeconds);
+    }
+
+    public void del(@Nonnull String key) { redis.del(key(key)); }
+
+    public boolean exists(@Nonnull String key) { return redis.exists(key(key)); }
+
+    @Nonnull
+    public String getNamespace() { return namespace; }
+
+    private String key(String k) { return namespace + ":" + k; }
 }

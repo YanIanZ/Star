@@ -38,7 +38,7 @@ public final class SQLiteProvider implements DatabaseProvider {
         for (int i = 0; i < params.length; i++) {
             ps.setObject(i + 1, params[i]);
         }
-        return new QueryResult(ps.executeQuery());
+        return new JdbcQueryResult(ps.executeQuery());
     }
 
     @Override
