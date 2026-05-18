@@ -18,6 +18,7 @@ dependencies {
     implementation(project(":star-scheduling"))
     implementation(project(":star-swm"))
 
+    implementation(project(":star-gui"))
     compileOnly("com.mojang:authlib:6.0.52")
 }
 

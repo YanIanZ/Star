@@ -14,5 +14,6 @@ include(
     "star-updater",
     "star-scheduling",
     "star-swm",
+    "star-gui",
     "star-api"
 )

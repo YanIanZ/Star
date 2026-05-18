@@ -42,7 +42,7 @@ public class HuskTownsProtectionModule implements ProtectionModule {
             return false;
         }
 
-        // Convert the dough interaction to HuskTowns' ActionType and check via the API
+        // Convert the Star interaction to HuskTowns' ActionType and check via the API
         return huskTownsAPI.isOperationAllowed(Operation.of(
                 huskTownsAPI.getOnlineUser(p.getPlayer()),
                 getHuskTownsAction(action),
@@ -51,13 +51,13 @@ public class HuskTownsProtectionModule implements ProtectionModule {
     }
 
     /**
-     * Returns the corresponding HuskTowns {@link OperationType} from the dough {@link Interaction}
+     * Returns the corresponding HuskTowns {@link OperationType} from the Star {@link Interaction}
      *
-     * @param doughAction The dough {@link Interaction}
+     * @param starAction The Star {@link Interaction}
      * @return The corresponding HuskTowns {@link OperationType}
      */
-    public @Nonnull OperationType getHuskTownsAction(@Nonnull Interaction doughAction) {
-        switch (doughAction) {
+    public @Nonnull OperationType getHuskTownsAction(@Nonnull Interaction starAction) {
+        switch (starAction) {
             case BREAK_BLOCK:
                 return OperationType.BLOCK_BREAK;
             case PLACE_BLOCK:

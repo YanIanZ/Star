@@ -27,6 +27,8 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
+import net.kyori.adventure.text.Component;
+
 import dev.yanianz.star.common.StarLogger;
 
 public class Config {
@@ -497,6 +499,40 @@ public class Config {
             inventory.setItem(i, getItem(path + "." + i));
         }
 
+        return inventory;
+    }
+
+    /**
+     * Gets the Contents of an Inventory at the specified path using a Component title.
+     *
+     * @param path  The path in the Config File
+     * @param size  The Size of the Inventory
+     * @param title The Title of the Inventory as a Component
+     * @return The generated Inventory
+     */
+    @Nonnull
+    public Inventory getInventory(@Nonnull String path, int size, @Nonnull Component title) {
+        Inventory inventory = Bukkit.createInventory(null, size, title);
+        for (int i = 0; i < size; i++) {
+            inventory.setItem(i, getItem(path + "." + i));
+        }
+        return inventory;
+    }
+
+    /**
+     * Gets the Contents of an Inventory at the specified path using a Component title.
+     *
+     * @param path  The path in the Config File
+     * @param title The title of the inventory as a Component
+     * @return The generated Inventory
+     */
+    @Nonnull
+    public Inventory getInventory(@Nonnull String path, @Nonnull Component title) {
+        int size = getInt(path + ".size");
+        Inventory inventory = Bukkit.createInventory(null, size, title);
+        for (int i = 0; i < size; i++) {
+            inventory.setItem(i, getItem(path + "." + i));
+        }
         return inventory;
     }
 

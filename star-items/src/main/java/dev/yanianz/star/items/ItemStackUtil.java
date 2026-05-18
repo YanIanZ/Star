@@ -8,6 +8,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.PotionMeta;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -141,5 +143,35 @@ public final class ItemStackUtil {
             }
             return itemStack.setItemMeta(itemMeta);
         }
+    }
+
+    /**
+     * Curries a {@link Consumer} which sets the display name to the given {@link Component}.
+     *
+     * @param component The component to set as display name
+     * @return Returns a {@link Consumer}
+     */
+    public static Consumer<ItemMeta> editDisplayNameComponent(@Nullable Component component) {
+        return (meta) -> {
+            if (component != null) {
+                meta.displayName(component);
+            }
+        };
+    }
+
+    /**
+     * Curries a {@link Consumer} which sets the lore to the given {@link Component}s.
+     *
+     * @param lore The lore components to set
+     * @return Returns a {@link Consumer}
+     */
+    public static Consumer<ItemMeta> editLoreComponents(@Nonnull List<Component> lore) {
+        return (meta) -> {
+            if (lore.isEmpty()) {
+                meta.lore(Collections.emptyList());
+                return;
+            }
+            meta.lore(new ArrayList<>(lore));
+        };
     }
 }

@@ -54,7 +54,7 @@ public final class ProtectionManager {
      * as a "Snapshot" of your plugins too.
      *
      * @param plugin
-     *            The plugin instance that integrates dough.
+     *            The plugin instance that integrates Star.
      */
     public ProtectionManager(@Nonnull Plugin plugin) {
         logger = new StarLogger(plugin.getServer(), "protection");

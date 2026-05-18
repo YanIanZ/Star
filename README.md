@@ -29,7 +29,7 @@
 
 ---
 
-> **Forked from [Dough](https://github.com/boblovespi/dough)** by [boblovespi](https://github.com/boblovespi) — rebranded, modernized, and extended with new modules & Java 25 support.
+> **Originally forked from Dough** by [boblovespi](https://github.com/boblovespi) — rebranded, modernized, and extended with new modules & Java 25 support.
 
 Star bundles everything you need to build plugins faster: reflection, config, chat, data, skins, items, inventories, protection, recipes, scheduling, auto-updates, and SlimeWorldManager — all under one cohesive API.
 
@@ -141,5 +141,5 @@ This project is licensed under the **MIT License** — see [LICENSE](LICENSE) fo
 ---
 
 <p align="center">
-  <sub>Originally forked from <a href="https://github.com/boblovespi/dough">Dough</a> by <a href="https://github.com/boblovespi">boblovespi</a></sub>
+  <sub>Originally forked from Dough by <a href="https://github.com/boblovespi">boblovespi</a></sub>
 </p>

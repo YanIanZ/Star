@@ -42,7 +42,7 @@ public class HuskClaimsProtectionModule implements ProtectionModule {
             return false;
         }
 
-        // Convert the dough interaction to HuskClaims' ActionType and check via the API
+        // Convert the Star interaction to HuskClaims' ActionType and check via the API
         return huskClaimsAPI.isOperationAllowed(Operation.of(
                 huskClaimsAPI.getOnlineUser(p.getPlayer()),
                 getHuskClaimsAction(action),
@@ -51,13 +51,13 @@ public class HuskClaimsProtectionModule implements ProtectionModule {
     }
 
     /**
-     * Returns the corresponding HuskClaims {@link OperationType} from the dough {@link Interaction}
+     * Returns the corresponding HuskClaims {@link OperationType} from the Star {@link Interaction}
      *
-     * @param doughAction The dough {@link Interaction}
+     * @param starAction The Star {@link Interaction}
      * @return The corresponding HuskClaims {@link OperationType}
      */
-    public @Nonnull OperationType getHuskClaimsAction(@Nonnull Interaction doughAction) {
-        switch (doughAction) {
+    public @Nonnull OperationType getHuskClaimsAction(@Nonnull Interaction starAction) {
+        switch (starAction) {
             case BREAK_BLOCK:
                 return OperationType.BLOCK_BREAK;
             case PLACE_BLOCK:
