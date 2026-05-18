@@ -50,6 +50,11 @@ Star bundles everything you need to build plugins faster: reflection, config, ch
 | `star-updater` | Plugin auto-update system |
 | `star-scheduling` | Task scheduling and queues |
 | `star-swm` | SlimeWorldManager adapter (AdvancedSlimePaper + SourbyCraft) |
+| `star-gui` | Fluent GUI framework with builder, pagination, templates, animations, state |
+| `star-vfx` | Particle visual effects — 11 shapes, 4 effects, fluent builder |
+| `star-economy` | Unified economy abstraction — Vault, banks, transactions, formatting |
+| `star-commands` | Annotation + builder command framework with argument parsing |
+| `star-world` | World utilities — block scanning, schematics, terrain, regions |
 | `star-api` | Aggregator — shades all modules into one JAR |
 
 ## Installation
