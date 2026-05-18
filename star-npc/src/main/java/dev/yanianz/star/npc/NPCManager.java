@@ -36,7 +36,7 @@ public final class NPCManager implements Listener {
         NPC npc = new NPC(id, profile, location);
         npc.spawn();
         npcs.put(id, npc);
-        logger.log(Level.FINE, "Created NPC " + id + " (" + profile.getName() + ")");
+        logger.log(Level.FINE, "Created NPC " + id + " (" + profile.name() + ")");
         return npc;
     }
 
@@ -55,7 +55,7 @@ public final class NPCManager implements Listener {
     public Optional<NPC> get(@Nonnull String id) { return Optional.ofNullable(npcs.get(id)); }
 
     @Nonnull
-    public Collection<NPC> getAll() { return Collections.unmodifiableCollection(npcs.values()); }
+    public Collection<NPC> getAll() { return List.copyOf(npcs.values()); }
 
     public void delete(@Nonnull String id) {
         NPC npc = npcs.remove(id);

@@ -89,7 +89,9 @@ class TestParticleBuilder {
     void effectBuild() {
         ParticleEffect effect = ParticleBuilder.effect(EffectType.EXPLOSION)
             .at(location).particle(Particle.FLAME).count(20).radius(3.0)
-            .interval(1).duration(10).build();
+            .interval(1).duration(10)
+            .plugin(MockBukkit.createMockPlugin("StarVFX"))
+            .build();
         assertNotNull(effect);
         assertFalse(effect.isRunning());
     }

@@ -33,7 +33,7 @@ public final class HologramManager {
     public Optional<Hologram> get(@Nonnull String id) { return Optional.ofNullable(holograms.get(id)); }
 
     @Nonnull
-    public Collection<Hologram> getAll() { return Collections.unmodifiableCollection(holograms.values()); }
+    public Collection<Hologram> getAll() { return List.copyOf(holograms.values()); }
 
     public void delete(@Nonnull String id) {
         Hologram holo = holograms.remove(id);

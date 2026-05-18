@@ -21,7 +21,7 @@ import dev.yanianz.star.common.CommonPatterns;
  * @author TheBusyBiscuit
  *
  */
-public class SemanticVersion implements Version {
+public non-sealed class SemanticVersion implements Version {
 
     private final int majorVersion;
     private final int minorVersion;
@@ -120,8 +120,7 @@ public class SemanticVersion implements Version {
      */
     @Override
     public boolean isNewerThan(@Nonnull Version version) {
-        if (isSimilar(version)) {
-            SemanticVersion semver = (SemanticVersion) version;
+        if (version instanceof SemanticVersion semver) {
             int major = semver.getMajorVersion();
 
             if (getMajorVersion() > major) {
@@ -149,8 +148,7 @@ public class SemanticVersion implements Version {
      */
     @Override
     public boolean isEqualTo(@Nonnull Version version) {
-        if (isSimilar(version)) {
-            SemanticVersion semver = (SemanticVersion) version;
+        if (version instanceof SemanticVersion semver) {
             int major = semver.getMajorVersion();
 
             if (major != getMajorVersion()) {
@@ -174,8 +172,7 @@ public class SemanticVersion implements Version {
      */
     @Override
     public boolean isOlderThan(@Nonnull Version version) {
-        if (isSimilar(version)) {
-            SemanticVersion semver = (SemanticVersion) version;
+        if (version instanceof SemanticVersion semver) {
             int major = semver.getMajorVersion();
 
             if (major > getMajorVersion()) {
@@ -223,8 +220,8 @@ public class SemanticVersion implements Version {
      */
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof SemanticVersion) {
-            return isEqualTo((Version) obj);
+        if (obj instanceof SemanticVersion sv) {
+            return isEqualTo(sv);
         } else {
             return false;
         }

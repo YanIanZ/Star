@@ -94,7 +94,7 @@ class TestGuiBuilder {
         GuiItem item = new GuiItem(
             new ItemStack(Material.EMERALD), e -> e.setCancelled(true));
 
-        assertEquals(Material.EMERALD, item.getItem().getType());
-        assertNotNull(item.getHandler());
+        assertEquals(Material.EMERALD, item.item().getType());
+        assertNotNull(item.handler());
     }
 }

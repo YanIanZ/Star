@@ -1,7 +1,7 @@
 package dev.yanianz.star.items;
 
 import io.papermc.lib.PaperLib;
-import org.bukkit.ChatColor;
+import dev.yanianz.star.common.ChatColors;
 import org.bukkit.Color;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -42,7 +42,7 @@ public final class ItemStackUtil {
     public static Consumer<ItemMeta> editDisplayName(@Nullable String name) {
         return (meta) -> {
             if (name != null) {
-                meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', name));
+                meta.displayName(ChatColors.legacyToComponent(name));
             }
         };
     }
@@ -73,8 +73,7 @@ public final class ItemStackUtil {
                 return;
             }
             List<String> newLore = new ArrayList<>(lore);
-            newLore.replaceAll(line -> ChatColor.translateAlternateColorCodes('&', line));
-            meta.setLore(newLore);
+            meta.lore(newLore.stream().map(line -> ChatColors.legacyToComponent(line)).toList());
         };
     }
 

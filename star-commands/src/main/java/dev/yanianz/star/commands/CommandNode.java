@@ -17,7 +17,9 @@ public final class CommandNode {
     private final List<ArgDef> args;
     private final Map<String, TabCompleter> tabCompleters;
 
-    public record ArgDef(@Nonnull String name, @Nonnull ArgumentType<?> type, boolean optional) {}
+    public record ArgDef(@Nonnull String name, @Nonnull ArgumentType<?> type, boolean optional) {
+        @Nonnull public ArgDef withType(@Nonnull ArgumentType<?> type) { return new ArgDef(name, type, optional); }
+    }
     public interface TabCompleter { @Nonnull List<String> complete(@Nonnull CommandContext ctx); }
 
     public CommandNode(@Nonnull String name, @Nonnull List<String> aliases, @Nullable String permission,

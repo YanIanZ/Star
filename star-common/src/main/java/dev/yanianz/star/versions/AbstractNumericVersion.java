@@ -10,7 +10,7 @@ import org.apache.commons.lang.Validate;
  * @author TheBusyBiscuit
  *
  */
-abstract class AbstractNumericVersion implements Version {
+public non-sealed abstract class AbstractNumericVersion implements Version {
 
     /**
      * The version number.

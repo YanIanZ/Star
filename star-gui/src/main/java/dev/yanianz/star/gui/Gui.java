@@ -25,7 +25,7 @@ import java.util.function.Consumer;
 public class Gui implements Listener {
 
     private final Inventory inventory;
-    private final Map<Integer, GuiItem> slotItems;
+    protected final Map<Integer, GuiItem> slotItems;
     private final Consumer<InventoryCloseEvent> closeHandler;
     private final boolean draggable;
     private final ItemStack fillItem;
@@ -41,7 +41,7 @@ public class Gui implements Listener {
         this.fillItem = fillItem;
 
         for (Map.Entry<Integer, GuiItem> entry : slotItems.entrySet()) {
-            inventory.setItem(entry.getKey(), entry.getValue().getItem());
+            inventory.setItem(entry.getKey(), entry.getValue().item());
         }
         if (fillItem != null) {
             for (int i = 0; i < inventory.getSize(); i++) {
@@ -75,7 +75,7 @@ public class Gui implements Listener {
         }
         GuiItem guiItem = slotItems.get(event.getSlot());
         if (guiItem != null) {
-            guiItem.getHandler().accept(new GuiClickEvent(event));
+            guiItem.handler().accept(new GuiClickEvent(event));
         }
     }
 
@@ -118,7 +118,7 @@ public class Gui implements Listener {
      */
     public void refresh() {
         for (Map.Entry<Integer, GuiItem> entry : slotItems.entrySet()) {
-            inventory.setItem(entry.getKey(), entry.getValue().getItem());
+            inventory.setItem(entry.getKey(), entry.getValue().item());
         }
     }
 }

@@ -38,7 +38,7 @@ class TestCombat {
         DamageModifier mod = new DamageModifier("sharp", 1.5, DamageType.MELEE);
         assertTrue(mod.appliesTo(DamageType.MELEE));
         assertFalse(mod.appliesTo(DamageType.MAGIC));
-        assertEquals(1.5, mod.getMultiplier());
+        assertEquals(1.5, mod.multiplier());
     }
 
     @Test

@@ -23,22 +23,22 @@ public final class DeathEffect implements ParticleEffect {
     private final double speed;
     private final Color color;
     private final List<Player> viewers;
+    private final Plugin plugin;
     private BukkitTask task;
 
     public DeathEffect(@Nonnull Particle particle, int count, @Nonnull Location location,
                        double radius, double height, double offsetX, double offsetY, double offsetZ,
-                       double speed, Color color, @Nonnull List<Player> viewers) {
+                       double speed, Color color, @Nonnull List<Player> viewers,
+                       @Nonnull Plugin plugin) {
         this.particle = particle; this.count = count; this.location = location;
         this.radius = radius; this.height = height;
         this.offsetX = offsetX; this.offsetY = offsetY; this.offsetZ = offsetZ;
         this.speed = speed; this.color = color; this.viewers = viewers;
+        this.plugin = plugin;
     }
 
     @Override
     public void start() {
-        Plugin plugin = Bukkit.getPluginManager().getPlugins().length > 0
-            ? Bukkit.getPluginManager().getPlugins()[0] : null;
-        if (plugin == null) return;
         // Immediate burst rings
         new CircleShape(particle, count, location, radius, offsetX, offsetY, offsetZ, speed, color, viewers).play();
         new CircleShape(particle, count / 2, location, radius * 0.5, offsetX, offsetY, offsetZ, speed, color, viewers).play();

@@ -65,5 +65,5 @@ public final class CommandContext {
     public boolean has(@Nonnull String key) { return parsed.containsKey(key); }
 
     @Nonnull
-    public Map<String, Object> parsed() { return Collections.unmodifiableMap(parsed); }
+    public Map<String, Object> parsed() { return Map.copyOf(parsed); }
 }

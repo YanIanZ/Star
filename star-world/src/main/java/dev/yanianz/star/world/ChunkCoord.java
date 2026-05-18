@@ -43,6 +43,9 @@ public record ChunkCoord(@Nonnull String worldName, int x, int z) {
         return new ChunkCoord(worldName, x + dx, z + dz);
     }
 
+    @Nonnull public ChunkCoord withX(int x) { return new ChunkCoord(worldName, x, z); }
+    @Nonnull public ChunkCoord withZ(int z) { return new ChunkCoord(worldName, x, z); }
+
     @Override
     public String toString() {
         return worldName + ":" + x + "," + z;

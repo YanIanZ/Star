@@ -50,8 +50,8 @@ public class SimpleNumericVersion extends AbstractNumericVersion {
      */
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof Version && isSimilar((Version) obj)) {
-            return isEqualTo((Version) obj);
+        if (obj instanceof SimpleNumericVersion sv) {
+            return isEqualTo(sv);
         } else {
             return false;
         }

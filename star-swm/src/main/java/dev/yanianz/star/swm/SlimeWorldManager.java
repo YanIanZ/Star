@@ -2,7 +2,8 @@ package dev.yanianz.star.swm;
 
 import java.lang.reflect.Method;
 import java.util.ServiceLoader;
-import java.util.logging.Logger;
+
+import dev.yanianz.star.common.StarLogger;
 
 /**
  * Unified SlimeWorldManager that discovers the best available SWM API
@@ -14,7 +15,7 @@ import java.util.logging.Logger;
  */
 public final class SlimeWorldManager {
 
-    private static final Logger LOGGER = Logger.getLogger("star:swm");
+    private static final StarLogger LOGGER = new StarLogger("swm");
     private static volatile Object cachedApi;
     private static volatile boolean cachedAvailable;
 

@@ -16,7 +16,7 @@ public final class DamageCalculator {
     }
 
     public void removeModifier(@Nonnull String name) {
-        modifiers.removeIf(m -> m.getName().equals(name));
+        modifiers.removeIf(m -> m.name().equals(name));
     }
 
     public void clearModifiers() {
@@ -26,7 +26,7 @@ public final class DamageCalculator {
     public double calculate(double baseDamage, @Nonnull LivingEntity attacker, @Nonnull LivingEntity defender, @Nonnull DamageType type) {
         double damage = baseDamage;
         for (DamageModifier mod : modifiers) {
-            if (mod.appliesTo(type)) damage *= mod.getMultiplier();
+            if (mod.appliesTo(type)) damage *= mod.multiplier();
         }
         double pen = type.getArmorPenetration();
         double armor = getArmor(defender) * (1 - pen);

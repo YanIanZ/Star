@@ -46,7 +46,7 @@ public final class EconomyManager {
 
     @Nonnull
     public List<EconomyProvider> getProviders() {
-        return Collections.unmodifiableList(providers);
+        return List.copyOf(providers);
     }
 
     @Nonnull

@@ -9,13 +9,12 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
+import dev.yanianz.star.common.ChatColors;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Sound;
@@ -35,7 +34,7 @@ public class Config {
 
     private final File file;
 
-    private Logger logger;
+    private StarLogger logger;
     private String header;
     protected FileConfiguration fileConfig;
 
@@ -50,7 +49,7 @@ public class Config {
         plugin.getConfig().options().copyDefaults(true);
         plugin.saveConfig();
 
-        this.logger = plugin.getLogger();
+        this.logger = new StarLogger(plugin.getServer(), "config");
         this.file = new File("plugins/" + plugin.getName().replace(" ", "_"), "config.yml");
 
         this.fileConfig = YamlConfiguration.loadConfiguration(this.file);
@@ -58,7 +57,7 @@ public class Config {
     }
 
     public Config(@Nonnull Plugin plugin, @Nonnull String name) {
-        this.logger = plugin.getLogger();
+        this.logger = new StarLogger(plugin.getServer(), "config");
         this.file = new File("plugins/" + plugin.getName().replace(" ", "_"), name);
         this.fileConfig = YamlConfiguration.loadConfiguration(this.file);
 
@@ -129,7 +128,7 @@ public class Config {
      * @param logger
      *            Your {@link Logger} instance
      */
-    public void setLogger(@Nonnull Logger logger) {
+    public void setLogger(@Nonnull StarLogger logger) {
         this.logger = logger;
     }
 
@@ -473,7 +472,7 @@ public class Config {
      */
     @Nonnull
     public Inventory getInventory(@Nonnull String path, int size, @Nonnull String title) {
-        Inventory inventory = Bukkit.createInventory(null, size, ChatColor.translateAlternateColorCodes('&', title));
+        Inventory inventory = Bukkit.createInventory(null, size, ChatColors.colorToComponent(title));
         for (int i = 0; i < size; i++) {
             inventory.setItem(i, getItem(path + "." + i));
         }
@@ -493,7 +492,7 @@ public class Config {
     @Nonnull
     public Inventory getInventory(@Nonnull String path, @Nonnull String title) {
         int size = getInt(path + ".size");
-        Inventory inventory = Bukkit.createInventory(null, size, ChatColor.translateAlternateColorCodes('&', title));
+        Inventory inventory = Bukkit.createInventory(null, size, ChatColors.colorToComponent(title));
 
         for (int i = 0; i < size; i++) {
             inventory.setItem(i, getItem(path + "." + i));

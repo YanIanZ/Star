@@ -21,7 +21,7 @@ import org.apache.commons.lang.Validate;
  * @see Versioned
  *
  */
-public interface Version extends Comparable<Version> {
+public sealed interface Version extends Comparable<Version> permits SemanticVersion, AbstractNumericVersion {
 
     /**
      * This method returns whether this {@link Version} is newer than the

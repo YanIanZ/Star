@@ -9,7 +9,6 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Stream;
 
 import javax.annotation.Nonnull;
@@ -34,6 +33,7 @@ import dev.yanianz.star.common.StarLogger;
 public class MinecraftRecipe<T extends Recipe> {
 
     private static final Set<MinecraftRecipe<?>> recipeTypes = new HashSet<>();
+    private static final StarLogger LOGGER = new StarLogger("recipes");
 
     public static final MinecraftRecipe<ShapedRecipe> SHAPED_CRAFTING;
     public static final MinecraftRecipe<ShapelessRecipe> SHAPELESS_CRAFTING;
@@ -45,9 +45,8 @@ public class MinecraftRecipe<T extends Recipe> {
     public static final MinecraftRecipe<SmithingRecipe> SMITHING;
 
     static {
-        StarLogger logger = new StarLogger("recipes");
 
-        SHAPED_CRAFTING = findRecipeType(logger, "CRAFTING_TABLE", type -> new MinecraftRecipe<>(type, ShapedRecipe.class, recipe -> recipe.length > 0 && recipe.length < 10, recipe -> {
+        SHAPED_CRAFTING = findRecipeType(LOGGER, "CRAFTING_TABLE", type -> new MinecraftRecipe<>(type, ShapedRecipe.class, recipe -> recipe.length > 0 && recipe.length < 10, recipe -> {
             List<RecipeChoice> choices = new LinkedList<>();
 
             for (String row : recipe.getShape()) {
@@ -77,7 +76,7 @@ public class MinecraftRecipe<T extends Recipe> {
             return true;
         }).findAny().map(ShapedRecipe::getResult)));
 
-        SHAPELESS_CRAFTING = findRecipeType(logger, "CRAFTING_TABLE", type -> new MinecraftRecipe<>(type, ShapelessRecipe.class, recipe -> recipe.length > 0 && recipe.length < 10, recipe -> recipe.getChoiceList().toArray(new RecipeChoice[0]), (input, stream) -> stream.filter(recipe -> {
+        SHAPELESS_CRAFTING = findRecipeType(LOGGER, "CRAFTING_TABLE", type -> new MinecraftRecipe<>(type, ShapelessRecipe.class, recipe -> recipe.length > 0 && recipe.length < 10, recipe -> recipe.getChoiceList().toArray(new RecipeChoice[0]), (input, stream) -> stream.filter(recipe -> {
             for (RecipeChoice ingredient : recipe.getChoiceList()) {
                 boolean found = false;
 
@@ -98,18 +97,18 @@ public class MinecraftRecipe<T extends Recipe> {
             return true;
         }).findAny().map(ShapelessRecipe::getResult)));
 
-        FURNACE = findRecipeType(logger, "FURNACE", type -> new MinecraftRecipe<>(type, FurnaceRecipe.class, recipe -> recipe.length == 1, recipe -> new RecipeChoice[] { recipe.getInputChoice() }, (input, stream) -> stream.filter(recipe -> recipe.getInputChoice().test(input[0])).findAny().map(recipe -> recipe.getResult())));
+        FURNACE = findRecipeType(LOGGER, "FURNACE", type -> new MinecraftRecipe<>(type, FurnaceRecipe.class, recipe -> recipe.length == 1, recipe -> new RecipeChoice[] { recipe.getInputChoice() }, (input, stream) -> stream.filter(recipe -> recipe.getInputChoice().test(input[0])).findAny().map(recipe -> recipe.getResult())));
 
         // 1.14+
-        BLAST_FURNACE = findRecipeType(logger, "BLAST_FURNACE", type -> new MinecraftRecipe<>(type, BlastingRecipe.class, recipe -> recipe.length == 1, recipe -> new RecipeChoice[] { recipe.getInputChoice() }, (input, stream) -> stream.filter(recipe -> recipe.getInputChoice().test(input[0])).findAny().map(BlastingRecipe::getResult)));
-        SMOKER = findRecipeType(logger, "SMOKER", type -> new MinecraftRecipe<>(type, SmokingRecipe.class, recipe -> recipe.length == 1, recipe -> new RecipeChoice[] { recipe.getInputChoice() }, (input, stream) -> stream.filter(recipe -> recipe.getInputChoice().test(input[0])).findAny().map(SmokingRecipe::getResult)));
-        CAMPFIRE = findRecipeType(logger, "CAMPFIRE", type -> new MinecraftRecipe<>(type, CampfireRecipe.class, recipe -> recipe.length == 1, recipe -> new RecipeChoice[] { recipe.getInputChoice() }, (input, stream) -> stream.filter(recipe -> recipe.getInputChoice().test(input[0])).findAny().map(CampfireRecipe::getResult)));
-        STONECUTTER = findRecipeType(logger, "STONECUTTER", type -> new MinecraftRecipe<>(type, StonecuttingRecipe.class, recipe -> recipe.length == 1, recipe -> new RecipeChoice[] { recipe.getInputChoice() }, (input, stream) -> stream.filter(recipe -> recipe.getInputChoice().test(input[0])).findAny().map(StonecuttingRecipe::getResult)));
-        SMITHING = findRecipeType(logger, "SMITHING_TABLE", type -> new MinecraftRecipe<>(type, SmithingRecipe.class, recipe -> recipe.length == 2, recipe -> new RecipeChoice[] { recipe.getBase(), recipe.getAddition() }, (input, stream) -> stream.filter(recipe -> recipe.getBase().test(input[0]) && recipe.getAddition().test(input[1])).findAny().map(SmithingRecipe::getResult)));
+        BLAST_FURNACE = findRecipeType(LOGGER, "BLAST_FURNACE", type -> new MinecraftRecipe<>(type, BlastingRecipe.class, recipe -> recipe.length == 1, recipe -> new RecipeChoice[] { recipe.getInputChoice() }, (input, stream) -> stream.filter(recipe -> recipe.getInputChoice().test(input[0])).findAny().map(BlastingRecipe::getResult)));
+        SMOKER = findRecipeType(LOGGER, "SMOKER", type -> new MinecraftRecipe<>(type, SmokingRecipe.class, recipe -> recipe.length == 1, recipe -> new RecipeChoice[] { recipe.getInputChoice() }, (input, stream) -> stream.filter(recipe -> recipe.getInputChoice().test(input[0])).findAny().map(SmokingRecipe::getResult)));
+        CAMPFIRE = findRecipeType(LOGGER, "CAMPFIRE", type -> new MinecraftRecipe<>(type, CampfireRecipe.class, recipe -> recipe.length == 1, recipe -> new RecipeChoice[] { recipe.getInputChoice() }, (input, stream) -> stream.filter(recipe -> recipe.getInputChoice().test(input[0])).findAny().map(CampfireRecipe::getResult)));
+        STONECUTTER = findRecipeType(LOGGER, "STONECUTTER", type -> new MinecraftRecipe<>(type, StonecuttingRecipe.class, recipe -> recipe.length == 1, recipe -> new RecipeChoice[] { recipe.getInputChoice() }, (input, stream) -> stream.filter(recipe -> recipe.getInputChoice().test(input[0])).findAny().map(StonecuttingRecipe::getResult)));
+        SMITHING = findRecipeType(LOGGER, "SMITHING_TABLE", type -> new MinecraftRecipe<>(type, SmithingRecipe.class, recipe -> recipe.length == 2, recipe -> new RecipeChoice[] { recipe.getBase(), recipe.getAddition() }, (input, stream) -> stream.filter(recipe -> recipe.getBase().test(input[0]) && recipe.getAddition().test(input[1])).findAny().map(SmithingRecipe::getResult)));
     }
 
     @ParametersAreNonnullByDefault
-    private static <T extends Recipe> @Nullable MinecraftRecipe<T> findRecipeType(Logger logger, String type, Function<String, MinecraftRecipe<T>> supplier) {
+    private static <T extends Recipe> @Nullable MinecraftRecipe<T> findRecipeType(StarLogger logger, String type, Function<String, MinecraftRecipe<T>> supplier) {
         try {
             return supplier.apply(type);
         } catch (Exception | LinkageError x) {
@@ -136,7 +135,7 @@ public class MinecraftRecipe<T extends Recipe> {
 
             recipeTypes.add(this);
         } catch (Exception | LinkageError x) {
-            System.err.println("Unable to load a Minecraft Recipe Type: " + material);
+            LOGGER.log(Level.WARNING, "Unable to load a Minecraft Recipe Type: {0}", material);
         }
     }
 

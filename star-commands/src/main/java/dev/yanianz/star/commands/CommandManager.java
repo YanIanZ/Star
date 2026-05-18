@@ -106,11 +106,7 @@ public final class CommandManager {
             for (java.lang.reflect.Parameter p : method.getParameters()) {
                 Arg arg = p.getAnnotation(Arg.class);
                 if (arg != null) {
-                    ArgumentType<?> type = STRING_TYPE;
-                    if (p.getType() == int.class || p.getType() == Integer.class) type = ArgumentType.INTEGER;
-                    else if (p.getType() == double.class || p.getType() == Double.class) type = ArgumentType.DOUBLE;
-                    else if (p.getType() == boolean.class || p.getType() == Boolean.class) type = ArgumentType.BOOLEAN;
-                    else if (p.getType() == org.bukkit.entity.Player.class) type = ArgumentType.PLAYER;
+                    ArgumentType<?> type = TYPE_MAP.getOrDefault(p.getType(), ArgumentType.STRING);
                     argDefs.add(new CommandNode.ArgDef(arg.value(), type, arg.optional()));
                 }
             }
@@ -132,7 +128,15 @@ public final class CommandManager {
         }
     }
 
-    private static final ArgumentType<String> STRING_TYPE = ArgumentType.STRING;
+    private static final Map<Class<?>, ArgumentType<?>> TYPE_MAP = Map.ofEntries(
+        Map.entry(int.class, ArgumentType.INTEGER),
+        Map.entry(Integer.class, ArgumentType.INTEGER),
+        Map.entry(double.class, ArgumentType.DOUBLE),
+        Map.entry(Double.class, ArgumentType.DOUBLE),
+        Map.entry(boolean.class, ArgumentType.BOOLEAN),
+        Map.entry(Boolean.class, ArgumentType.BOOLEAN),
+        Map.entry(org.bukkit.entity.Player.class, ArgumentType.PLAYER)
+    );
 
     public void scan(@Nonnull String packageName) {
         logger.log(Level.INFO, "Package scanning not available; use register(Object) instead");

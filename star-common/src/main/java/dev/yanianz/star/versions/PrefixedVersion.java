@@ -43,7 +43,7 @@ public class PrefixedVersion extends AbstractNumericVersion {
      */
     @Override
     public boolean isSimilar(@Nonnull Version version) {
-        return version instanceof PrefixedVersion && prefix.equals(((PrefixedVersion) version).getPrefix());
+        return version instanceof PrefixedVersion pv && prefix.equals(pv.getPrefix());
     }
 
     /**
@@ -76,8 +76,8 @@ public class PrefixedVersion extends AbstractNumericVersion {
      */
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof Version && isSimilar((Version) obj)) {
-            return isEqualTo((Version) obj);
+        if (obj instanceof PrefixedVersion pv && prefix.equals(pv.getPrefix())) {
+            return isEqualTo(pv);
         } else {
             return false;
         }

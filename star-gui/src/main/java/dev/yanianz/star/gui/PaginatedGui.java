@@ -101,16 +101,20 @@ public class PaginatedGui extends Gui {
 
     private void renderPage() {
         getInventory().clear();
+        slotItems.clear();
 
         for (Map.Entry<Integer, GuiItem> entry : staticItems.entrySet()) {
-            getInventory().setItem(entry.getKey(), entry.getValue().getItem());
+            getInventory().setItem(entry.getKey(), entry.getValue().item());
+            slotItems.put(entry.getKey(), entry.getValue());
         }
 
         int start = currentPage * contentSlots.length;
         for (int i = 0; i < contentSlots.length; i++) {
             int itemIndex = start + i;
             if (itemIndex < items.size()) {
-                getInventory().setItem(contentSlots[i], items.get(itemIndex).getItem());
+                GuiItem guiItem = items.get(itemIndex);
+                getInventory().setItem(contentSlots[i], guiItem.item());
+                slotItems.put(contentSlots[i], guiItem);
             } else if (emptyPageItem != null) {
                 getInventory().setItem(contentSlots[i], emptyPageItem.clone());
             }

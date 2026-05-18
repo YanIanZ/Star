@@ -22,23 +22,23 @@ public final class TrailEffect implements ParticleEffect {
     private final double speed;
     private final Color color;
     private final List<Player> viewers;
+    private final Plugin plugin;
     private BukkitTask task;
     private int ticksElapsed;
 
     public TrailEffect(@Nonnull Particle particle, int count, @Nonnull Entity entity,
                        int interval, int duration, double offsetX, double offsetY, double offsetZ,
-                       double speed, Color color, @Nonnull List<Player> viewers) {
+                       double speed, Color color, @Nonnull List<Player> viewers,
+                       @Nonnull Plugin plugin) {
         this.particle = particle; this.count = count; this.entity = entity;
         this.interval = interval; this.duration = duration;
         this.offsetX = offsetX; this.offsetY = offsetY; this.offsetZ = offsetZ;
         this.speed = speed; this.color = color; this.viewers = viewers;
+        this.plugin = plugin;
     }
 
     @Override
     public void start() {
-        Plugin plugin = Bukkit.getPluginManager().getPlugins().length > 0
-            ? Bukkit.getPluginManager().getPlugins()[0] : null;
-        if (plugin == null) return;
         task = Bukkit.getScheduler().runTaskTimer(plugin, () -> {
             if (ticksElapsed >= duration || entity.isDead() || !entity.isValid()) { stop(); return; }
             Location loc = entity.getLocation().add(0, 1, 0);

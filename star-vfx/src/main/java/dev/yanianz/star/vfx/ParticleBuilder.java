@@ -8,6 +8,8 @@ import org.bukkit.Particle;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
+import org.bukkit.plugin.Plugin;
+
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -43,6 +45,7 @@ public final class ParticleBuilder {
     private double offsetY = 0;
     private double offsetZ = 0;
     private double speed = 0;
+    private Plugin plugin;
     private List<Player> viewers = new ArrayList<>();
 
     private ParticleBuilder(ShapeType type) {
@@ -107,6 +110,8 @@ public final class ParticleBuilder {
     @Nonnull public ParticleBuilder offset(double x, double y, double z) { this.offsetX = x; this.offsetY = y; this.offsetZ = z; return this; }
     /** Sets the particle speed. */
     @Nonnull public ParticleBuilder speed(double s) { this.speed = s; return this; }
+    /** Sets the plugin for scheduling effect tasks. */
+    @Nonnull public ParticleBuilder plugin(@Nonnull Plugin plugin) { this.plugin = plugin; return this; }
     /** Sets the players who will see the particles. */
     @Nonnull public ParticleBuilder viewers(@Nonnull Player... v) { Collections.addAll(this.viewers, v); return this; }
 
@@ -141,11 +146,12 @@ public final class ParticleBuilder {
     }
 
     private ParticleEffect createEffect() {
+        if (plugin == null) throw new IllegalStateException("plugin() must be set before building an effect");
         return switch (effectType) {
-            case TRAIL -> new TrailEffect(particle, count, entity, interval, duration, offsetX, offsetY, offsetZ, speed, color, viewers);
-            case EXPLOSION -> new ExplosionEffect(particle, count, location, radius, interval, duration, offsetX, offsetY, offsetZ, speed, color, viewers);
-            case DEATH -> new DeathEffect(particle, count, location, radius, height, offsetX, offsetY, offsetZ, speed, color, viewers);
-            case BLOCK_BREAK -> new BlockBreakEffect(particle, count, location, radius, offsetX, offsetY, offsetZ, speed, color, viewers);
+            case TRAIL -> new TrailEffect(particle, count, entity, interval, duration, offsetX, offsetY, offsetZ, speed, color, viewers, plugin);
+            case EXPLOSION -> new ExplosionEffect(particle, count, location, radius, interval, duration, offsetX, offsetY, offsetZ, speed, color, viewers, plugin);
+            case DEATH -> new DeathEffect(particle, count, location, radius, height, offsetX, offsetY, offsetZ, speed, color, viewers, plugin);
+            case BLOCK_BREAK -> new BlockBreakEffect(particle, count, location, radius, offsetX, offsetY, offsetZ, speed, color, viewers, plugin);
         };
     }
 }

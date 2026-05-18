@@ -22,23 +22,23 @@ public final class ExplosionEffect implements ParticleEffect {
     private final double speed;
     private final Color color;
     private final List<Player> viewers;
+    private final Plugin plugin;
     private BukkitTask task;
     private int ticksElapsed;
 
     public ExplosionEffect(@Nonnull Particle particle, int count, @Nonnull Location location,
                            double radius, int interval, int duration, double offsetX, double offsetY,
-                           double offsetZ, double speed, Color color, @Nonnull List<Player> viewers) {
+                           double offsetZ, double speed, Color color, @Nonnull List<Player> viewers,
+                           @Nonnull Plugin plugin) {
         this.particle = particle; this.count = count; this.location = location;
         this.radius = radius; this.interval = interval; this.duration = duration;
         this.offsetX = offsetX; this.offsetY = offsetY; this.offsetZ = offsetZ;
         this.speed = speed; this.color = color; this.viewers = viewers;
+        this.plugin = plugin;
     }
 
     @Override
     public void start() {
-        Plugin plugin = Bukkit.getPluginManager().getPlugins().length > 0
-            ? Bukkit.getPluginManager().getPlugins()[0] : null;
-        if (plugin == null) return;
         task = Bukkit.getScheduler().runTaskTimer(plugin, () -> {
             if (ticksElapsed >= duration) { stop(); return; }
             double progress = (double) ticksElapsed / duration;

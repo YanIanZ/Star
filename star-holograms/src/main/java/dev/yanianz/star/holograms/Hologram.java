@@ -30,7 +30,7 @@ public final class Hologram {
     public void insertLine(int index, @Nonnull HologramLine line) { lines.add(index, line); refreshDisplays(); }
     public void removeLine(int index) { lines.remove(index); refreshDisplays(); }
     public void clearLines() { lines.clear(); clearDisplays(); }
-    @Nonnull public List<HologramLine> getLines() { return Collections.unmodifiableList(lines); }
+    @Nonnull public List<HologramLine> getLines() { return List.copyOf(lines); }
 
     public void setAnimation(@Nonnull HologramAnimation animation) { this.animation = animation; }
     @Nonnull public Optional<HologramAnimation> getAnimation() { return Optional.ofNullable(animation); }

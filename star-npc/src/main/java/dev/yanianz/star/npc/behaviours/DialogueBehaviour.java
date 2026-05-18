@@ -15,6 +15,6 @@ public final class DialogueBehaviour implements NPCBehaviour {
 
     @Override
     public void onInteract(@Nonnull NPC npc, @Nonnull Player player) {
-        player.sendMessage(dialogue.getText());
+        player.sendMessage(dialogue.text());
     }
 }

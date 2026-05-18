@@ -28,7 +28,7 @@ public final class CompositeCommand {
         if (defaultNode == null) defaultNode = node;
     }
 
-    @Nonnull public List<CommandNode> getNodes() { return Collections.unmodifiableList(nodes); }
+    @Nonnull public List<CommandNode> getNodes() { return List.copyOf(nodes); }
 
     @Nonnull
     public CommandNode matchNode(@Nonnull String label) {

@@ -44,7 +44,7 @@ public final class NPC {
     public void spawn() {
         if (entity != null || spawnLocation == null) return;
         entity = (LivingEntity) spawnLocation.getWorld().spawnEntity(spawnLocation, EntityType.PLAYER);
-        entity.setCustomName(profile.getName());
+        entity.setCustomName(profile.name());
         entity.setCustomNameVisible(true);
     }
 
@@ -63,7 +63,7 @@ public final class NPC {
     }
 
     @Nonnull
-    public List<NPCBehaviour> getBehaviours() { return Collections.unmodifiableList(behaviours); }
+    public List<NPCBehaviour> getBehaviours() { return List.copyOf(behaviours); }
 
     public void setInteractHandler(@Nullable BiConsumer<Player, org.bukkit.event.inventory.ClickType> handler) {
         this.interactHandler = handler;
