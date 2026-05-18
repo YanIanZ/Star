@@ -28,5 +28,10 @@ include(
     "star-integrations",
     "star-packet",
     "star-test",
+    "star-calendar",
+    "star-quests",
+    "star-redis",
+    "star-profiles",
+    "star-hooks",
     "star-api"
 )

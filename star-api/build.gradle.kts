@@ -32,6 +32,11 @@ dependencies {
     implementation(project(":star-integrations"))
     implementation(project(":star-packet"))
     implementation(project(":star-test"))
+    implementation(project(":star-calendar"))
+    implementation(project(":star-quests"))
+    implementation(project(":star-redis"))
+    implementation(project(":star-profiles"))
+    implementation(project(":star-hooks"))
     compileOnly("com.mojang:authlib:6.0.52")
 }
 
