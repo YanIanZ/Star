@@ -22,6 +22,7 @@ import org.bukkit.plugin.Plugin;
 
 import com.google.common.hash.Hashing;
 
+import dev.yanianz.star.common.StarLogger;
 import dev.yanianz.star.versions.Version;
 
 abstract class UpdaterTask<V extends Version> implements Runnable {
@@ -31,9 +32,11 @@ abstract class UpdaterTask<V extends Version> implements Runnable {
     private final URL url;
     private final int timeout;
     private final V currentVersion;
+    private final StarLogger logger;
 
     UpdaterTask(@Nonnull PluginUpdater<V> updater, @Nonnull URL url) {
         this.plugin = updater.getPlugin();
+        this.logger = new StarLogger(plugin.getServer(), "updater");
         this.file = updater.getFile();
         this.url = url;
         this.timeout = updater.getConnectionTimeout();
@@ -52,8 +55,8 @@ abstract class UpdaterTask<V extends Version> implements Runnable {
                 validateAndInstall(latestVersion);
             }
         } catch (NumberFormatException x) {
-            plugin.getLogger().log(Level.SEVERE, "Could not auto-update {0}", plugin.getName());
-            plugin.getLogger().log(Level.SEVERE, "Unrecognized Version: {0}", currentVersion);
+            logger.log(Level.SEVERE, "Could not auto-update {0}", plugin.getName());
+            logger.log(Level.SEVERE, "Unrecognized Version: {0}", currentVersion);
         }
     }
 
@@ -69,25 +72,25 @@ abstract class UpdaterTask<V extends Version> implements Runnable {
                 return parse(reader.readLine());
             }
         } catch (IOException | URISyntaxException e) {
-            plugin.getLogger().log(Level.WARNING, "Could not connect to the updating site, is it down?", e);
+            logger.log(Level.WARNING, "Could not connect to the updating site, is it down?", e);
             return null;
         }
     }
 
     private void validateAndInstall(@Nonnull UpdateInfo updateInfo) {
-        if (updateInfo.getVersion().isNewerThan(currentVersion)) {
+        if (updateInfo.version().isNewerThan(currentVersion)) {
             install(updateInfo);
         } else {
-            plugin.getLogger().log(Level.INFO, "{0} is already up to date!", plugin.getName());
+            logger.log(Level.INFO, "{0} is already up to date!", plugin.getName());
         }
     }
 
     private void install(@Nonnull UpdateInfo info) {
-        plugin.getLogger().log(Level.INFO, "{0} is outdated!", plugin.getName());
-        plugin.getLogger().log(Level.INFO, "Downloading {0}, version: {1}", new Object[] { plugin.getName(), info.getVersion() });
+        logger.log(Level.INFO, "{0} is outdated!", plugin.getName());
+        logger.log(Level.INFO, "Downloading {0}, version: {1}", new Object[] { plugin.getName(), info.version() });
 
         File outputFile = new File("plugins/" + Bukkit.getUpdateFolder(), file.getName());
-        try (BufferedInputStream input = new BufferedInputStream(info.getUrl().openStream()); FileOutputStream output = new FileOutputStream(outputFile)) {
+        try (BufferedInputStream input = new BufferedInputStream(info.url().openStream()); FileOutputStream output = new FileOutputStream(outputFile)) {
             byte[] data = new byte[1024];
             int read;
 
@@ -95,27 +98,27 @@ abstract class UpdaterTask<V extends Version> implements Runnable {
                 output.write(data, 0, read);
             }
         } catch (Exception x) {
-            plugin.getLogger().log(Level.SEVERE, x, () -> "Failed to auto-update " + plugin.getName());
+            logger.log(Level.SEVERE, x, () -> "Failed to auto-update " + plugin.getName());
         } finally {
             try {
                 // Check the checksum
                 byte[] fileBytes = Files.readAllBytes(outputFile.toPath());
                 String checksum = Hashing.sha256().hashBytes(fileBytes).toString();
 
-                if (!checksum.equals(info.getChecksum())) {
-                    plugin.getLogger().log(Level.SEVERE, "The downloaded file is corrupted or was tampered with.");
+                if (!checksum.equals(info.checksum())) {
+                    logger.log(Level.SEVERE, "The downloaded file is corrupted or was tampered with.");
                     return;
                 }
             } catch(Exception e) {
-                plugin.getLogger().log(Level.SEVERE, "Failed to verify checksum", e);
+                logger.log(Level.SEVERE, "Failed to verify checksum", e);
                 return;
             }
 
-            plugin.getLogger().log(Level.INFO, " ");
-            plugin.getLogger().log(Level.INFO, "#################### - UPDATE - ####################");
-            plugin.getLogger().log(Level.INFO, "{0} was successfully updated ({1} -> {2})", new Object[] { plugin.getName(), currentVersion, info.getVersion() });
-            plugin.getLogger().log(Level.INFO, "Please restart your Server in order to use the new Version");
-            plugin.getLogger().log(Level.INFO, " ");
+            logger.log(Level.INFO, " ");
+            logger.log(Level.INFO, "#################### - UPDATE - ####################");
+            logger.log(Level.INFO, "{0} was successfully updated ({1} -> {2})", new Object[] { plugin.getName(), currentVersion, info.version() });
+            logger.log(Level.INFO, "Please restart your Server in order to use the new Version");
+            logger.log(Level.INFO, " ");
         }
     }
 }

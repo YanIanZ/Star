@@ -1,5 +1,5 @@
 package dev.yanianz.star.calendar;
-import java.util.*;
+import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public final class EventHistory {

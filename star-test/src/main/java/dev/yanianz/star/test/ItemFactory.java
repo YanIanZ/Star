@@ -2,7 +2,9 @@ package dev.yanianz.star.test;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import javax.annotation.Nonnull;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public final class ItemFactory {
     private ItemFactory() {}

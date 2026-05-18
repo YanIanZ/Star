@@ -13,6 +13,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import dev.yanianz.star.common.CommonPatterns;
+import dev.yanianz.star.common.StarLogger;
 import dev.yanianz.star.versions.PrefixedVersion;
 
 public class GitHubBuildsUpdater extends AbstractPluginUpdater<PrefixedVersion> {

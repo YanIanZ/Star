@@ -4,7 +4,8 @@ import org.bukkit.command.CommandSender;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 
 public final class CommandNode {

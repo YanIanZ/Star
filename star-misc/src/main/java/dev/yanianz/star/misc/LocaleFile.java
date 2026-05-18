@@ -3,7 +3,9 @@ package dev.yanianz.star.misc;
 import org.bukkit.configuration.file.YamlConfiguration;
 import javax.annotation.Nonnull;
 import java.io.File;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 public final class LocaleFile {
     private final Map<String, String> messages = new HashMap<>();

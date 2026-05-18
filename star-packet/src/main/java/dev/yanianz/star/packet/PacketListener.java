@@ -3,7 +3,10 @@ package dev.yanianz.star.packet;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import javax.annotation.Nonnull;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.BiConsumer;
 
 public final class PacketListener {

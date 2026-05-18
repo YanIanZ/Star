@@ -1,7 +1,9 @@
 package dev.yanianz.star.database;
 
 import javax.annotation.Nonnull;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /** Fluent SQL query builder. */
 public final class QueryBuilder {

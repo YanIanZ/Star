@@ -5,7 +5,8 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import javax.annotation.Nonnull;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /** Calculates damage with armor, enchantments, and custom modifiers. */
 public final class DamageCalculator {

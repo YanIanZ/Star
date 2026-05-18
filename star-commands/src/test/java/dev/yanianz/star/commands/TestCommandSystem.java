@@ -2,7 +2,8 @@ package dev.yanianz.star.commands;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.*;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 
 @DisplayName("Command System")
 class TestCommandSystem {

@@ -2,7 +2,8 @@ package dev.yanianz.star.profiles;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public final class ProfileData {
     private final Map<String, String> data = new LinkedHashMap<>();

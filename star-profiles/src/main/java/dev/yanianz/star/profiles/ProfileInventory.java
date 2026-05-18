@@ -3,7 +3,8 @@ package dev.yanianz.star.profiles;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import javax.annotation.Nonnull;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
 
 public final class ProfileInventory {
     private ProfileInventory() {}

@@ -1,7 +1,8 @@
 package dev.yanianz.star.calendar;
 import org.bukkit.plugin.Plugin;
 import javax.annotation.Nonnull;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public final class EventScheduler {
     private final Plugin plugin;

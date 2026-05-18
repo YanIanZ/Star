@@ -2,6 +2,8 @@ package dev.yanianz.star.updater;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+
+import dev.yanianz.star.common.StarLogger;
 import dev.yanianz.star.versions.PrefixedVersion;
 import org.bukkit.plugin.Plugin;
 

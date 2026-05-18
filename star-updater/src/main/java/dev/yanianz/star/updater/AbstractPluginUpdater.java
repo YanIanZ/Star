@@ -2,7 +2,7 @@ package dev.yanianz.star.updater;
 
 import java.io.File;
 import java.util.concurrent.CompletableFuture;
-import java.util.logging.Logger;
+import dev.yanianz.star.common.StarLogger;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -59,8 +59,8 @@ abstract class AbstractPluginUpdater<V extends Version> implements PluginUpdater
         return plugin;
     }
 
-    public @Nonnull Logger getLogger() {
-        return plugin.getLogger();
+    public @Nonnull StarLogger getLogger() {
+        return new StarLogger(plugin.getServer(), "updater");
     }
 
     public @Nonnull File getFile() {

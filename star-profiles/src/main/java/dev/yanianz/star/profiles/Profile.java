@@ -3,7 +3,10 @@ package dev.yanianz.star.profiles;
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 import javax.annotation.Nonnull;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
 public final class Profile {
     private final String name;

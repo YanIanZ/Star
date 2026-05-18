@@ -2,7 +2,8 @@ package dev.yanianz.star.hooks;
 import dev.yanianz.star.common.StarLogger;
 import org.bukkit.plugin.Plugin;
 import javax.annotation.Nonnull;
-import java.util.*;
+import java.util.Collection;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 

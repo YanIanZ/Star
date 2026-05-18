@@ -4,7 +4,10 @@ import dev.yanianz.star.common.StarLogger;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import javax.annotation.Nonnull;
-import java.util.*;
+import java.util.Collection;
+import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 
