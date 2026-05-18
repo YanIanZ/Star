@@ -16,5 +16,6 @@ include(
     "star-swm",
     "star-gui",
     "star-vfx",
+    "star-economy",
     "star-api"
 )

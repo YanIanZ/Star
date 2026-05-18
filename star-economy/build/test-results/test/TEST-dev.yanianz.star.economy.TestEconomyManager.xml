@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="EconomyManager" tests="6" skipped="0" failures="0" errors="0" timestamp="2026-05-18T11:02:20.503Z" hostname="iYans-MacBook-Air.local" time="0.012">
+  <properties/>
+  <testcase name="Bank data class works" classname="dev.yanianz.star.economy.TestEconomyManager" time="0.008"/>
+  <testcase name="TransactionResult helpers work" classname="dev.yanianz.star.economy.TestEconomyManager" time="0.001"/>
+  <testcase name="CurrencyFormatter formatShort works" classname="dev.yanianz.star.economy.TestEconomyManager" time="0.002"/>
+  <testcase name="TransactionEntry record works" classname="dev.yanianz.star.economy.TestEconomyManager" time="0.0"/>
+  <testcase name="CurrencyType record works" classname="dev.yanianz.star.economy.TestEconomyManager" time="0.0"/>
+  <testcase name="CurrencyFormatter formatRaw works" classname="dev.yanianz.star.economy.TestEconomyManager" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
