@@ -1,85 +1,92 @@
 package dev.yanianz.star.swm;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.lang.reflect.Method;
 import java.util.ServiceLoader;
 import java.util.logging.Logger;
 
 /**
- * Unified SlimeWorldManager that auto-detects the best available SWM adapter.
+ * Unified SlimeWorldManager that discovers the best available SWM API
+ * via ServiceLoader (primary) with reflection fallback.
  *
  * Usage:
- *   SlimeWorldAdapter adapter = SlimeWorldManager.getAdapter();
- *   adapter.loadWorld("my_world", false);
- *
- * Detection order:
- * 1. Check registered adapters by priority (highest first)
- * 2. Fall back to built-in adapters (SourbyCraft, then AsPaper)
- * 3. Throw IllegalStateException if no adapter is available
+ *   Object api = SlimeWorldManager.getApi();
+ *   if (api != null) { ... } // AdvancedSlimePaperAPI or equivalent
  */
 public final class SlimeWorldManager {
 
     private static final Logger LOGGER = Logger.getLogger("star:swm");
-    private static SlimeWorldAdapter cachedAdapter;
-    private static final List<SlimeWorldAdapter> registeredAdapters = new ArrayList<>();
+    private static Object cachedApi;
+    private static boolean cachedAvailable;
+
+    private static final String SOURBYCRAFT_API = "dev.iyanz.sourbycraft.swm.api.AdvancedSlimePaperAPI";
+    private static final String ASPAPER_API = "com.infernalsuite.asp.api.AdvancedSlimePaperAPI";
 
     private SlimeWorldManager() {}
 
     /**
-     * Returns the best available SlimeWorldAdapter.
-     * Results are cached after first detection.
-     *
-     * @return the highest-priority available adapter
-     * @throws IllegalStateException if no adapter is available
+     * Returns the best available SWM API instance, or null if none found.
+     * Result is cached after first detection.
      */
-    public static SlimeWorldAdapter getAdapter() {
-        if (cachedAdapter != null) {
-            return cachedAdapter;
+    public static Object getApi() {
+        if (cachedApi != null || cachedAvailable) {
+            return cachedApi;
         }
 
-        List<SlimeWorldAdapter> candidates = new ArrayList<>();
+        // 1. Try ServiceLoader for SourbyCraft's AdvancedSlimePaperAPI
+        try {
+            Class<?> apiClass = Class.forName(SOURBYCRAFT_API);
+            for (Object impl : ServiceLoader.load(apiClass)) {
+                cachedApi = impl;
+                LOGGER.info("Found SWM API via ServiceLoader: " + SOURBYCRAFT_API);
+                return cachedApi;
+            }
+        } catch (ClassNotFoundException ignored) {}
 
-        // Check ServiceLoader-discovered adapters first
-        ServiceLoader.load(SlimeWorldAdapter.class).forEach(candidates::add);
+        // 2. Try ServiceLoader for standalone AdvancedSlimePaper API
+        try {
+            Class<?> apiClass = Class.forName(ASPAPER_API);
+            for (Object impl : ServiceLoader.load(apiClass)) {
+                cachedApi = impl;
+                LOGGER.info("Found SWM API via ServiceLoader: " + ASPAPER_API);
+                return cachedApi;
+            }
+        } catch (ClassNotFoundException ignored) {}
 
-        // Add built-in adapters
-        candidates.add(new SourbyCraftSWMAdapter());
-        candidates.add(new AsPaperSWMAdapter());
+        // 3. Fallback: reflection on SourbyCraft's static instance() method
+        try {
+            Class<?> apiClass = Class.forName(SOURBYCRAFT_API);
+            Method m = apiClass.getMethod("instance");
+            cachedApi = m.invoke(null);
+            LOGGER.info("Found SWM API via reflection: " + SOURBYCRAFT_API);
+            return cachedApi;
+        } catch (Exception ignored) {}
 
-        // Add manually registered adapters
-        candidates.addAll(registeredAdapters);
+        // 4. Fallback: reflection on AsPaper's static instance() method
+        try {
+            Class<?> apiClass = Class.forName(ASPAPER_API);
+            Method m = apiClass.getMethod("instance");
+            cachedApi = m.invoke(null);
+            LOGGER.info("Found SWM API via reflection: " + ASPAPER_API);
+            return cachedApi;
+        } catch (Exception ignored) {}
 
-        // Filter to available, sort by priority descending
-        SlimeWorldAdapter best = candidates.stream()
-            .filter(SlimeWorldAdapter::isAvailable)
-            .max(Comparator.comparingInt(SlimeWorldAdapter::getPriority))
-            .orElse(null);
-
-        if (best == null) {
-            throw new IllegalStateException(
-                "No SlimeWorldManager implementation available. " +
-                "Ensure AdvancedSlimePaper or SourbyCraft is installed."
-            );
-        }
-
-        cachedAdapter = best;
-        LOGGER.info("Using SWM adapter: " + best.getName() + " (priority: " + best.getPriority() + ")");
-        return best;
+        cachedAvailable = true;
+        LOGGER.warning("No SlimeWorldManager API implementation found on classpath");
+        return null;
     }
 
     /**
-     * Registers a custom adapter. Registered adapters are checked before built-in ones.
+     * Checks if any SWM API is available.
      */
-    public static void registerAdapter(SlimeWorldAdapter adapter) {
-        registeredAdapters.add(adapter);
-        cachedAdapter = null;
+    public static boolean isAvailable() {
+        return getApi() != null;
     }
 
     /**
-     * Resets the cached adapter. Next call to getAdapter() will re-detect.
+     * Resets the cached API. Next call to getApi() will re-detect.
      */
     public static void reset() {
-        cachedAdapter = null;
+        cachedApi = null;
+        cachedAvailable = false;
     }
 }
