@@ -22,6 +22,7 @@ dependencies {
     implementation(project(":star-vfx"))
     implementation(project(":star-economy"))
     implementation(project(":star-commands"))
+    implementation(project(":star-world"))
     compileOnly("com.mojang:authlib:6.0.52")
 }
 

@@ -18,5 +18,6 @@ include(
     "star-vfx",
     "star-economy",
     "star-commands",
+    "star-world",
     "star-api"
 )
