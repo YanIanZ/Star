@@ -146,5 +146,5 @@ This project is licensed under the **MIT License** — see [LICENSE](LICENSE) fo
 ---
 
 <p align="center">
-  <sub>Originally forked from Dough by <a href="https://github.com/boblovespi">boblovespi</a></sub>
+  <sub>Originally forked from <a href="https://github.com/Slimefun/dough">Dough</a> — Slimefun's utility library by <a href="https://github.com/boblovespi">boblovespi</a></sub>
 </p>
