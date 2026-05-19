@@ -5,6 +5,7 @@ import dev.yanianz.star.hooks.hooks.EssentialsHook;
 import dev.yanianz.star.hooks.hooks.DiscordSRVHook;
 import dev.yanianz.star.hooks.hooks.PlaceholderAPIHook;
 import dev.yanianz.star.hooks.hooks.WorldGuardHook;
+import dev.yanianz.star.hooks.hooks.ViaVersionHook;
 import org.junit.jupiter.api.*;
 
 @DisplayName("Hooks")
@@ -61,5 +62,18 @@ class TestHooks {
         mgr.detectAll();
         assertEquals(2, mgr.getAll().size());
         assertNotNull(mgr.get("LuckPerms"));
+    }
+
+    @Test @DisplayName("ViaVersion hook name")
+    void viaVersion() {
+        ViaVersionHook hook = new ViaVersionHook();
+        assertEquals("ViaVersion", hook.getName());
+        assertEquals(-1, hook.getProtocolVersion(null));
+    }
+
+    @Test @DisplayName("HookManager enable check")
+    void hookManagerEnabled() {
+        HookManager mgr = new HookManager(org.mockbukkit.mockbukkit.MockBukkit.createMockPlugin("StarHooks"));
+        assertFalse(mgr.isEnabled("nonexistent"));
     }
 }

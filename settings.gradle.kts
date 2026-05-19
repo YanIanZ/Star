@@ -17,7 +17,6 @@ include(
     "star-gui",
     "star-vfx",
     "star-economy",
-    "star-commands",
     "star-world",
     "star-holograms",
     "star-database",

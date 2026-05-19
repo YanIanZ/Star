@@ -3,6 +3,7 @@ package dev.yanianz.star.vfx;
 import org.mockbukkit.mockbukkit.MockBukkit;
 import org.mockbukkit.mockbukkit.ServerMock;
 import org.mockbukkit.mockbukkit.world.WorldMock;
+import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.junit.jupiter.api.*;
@@ -94,5 +95,48 @@ class TestParticleBuilder {
             .build();
         assertNotNull(effect);
         assertFalse(effect.isRunning());
+    }
+
+    @Test @DisplayName("spiral effect builds")
+    void spiralEffect() {
+        ParticleEffect effect = ParticleBuilder.effect(EffectType.SPIRAL)
+            .at(location).particle(Particle.FLAME).count(30).radius(3.0).height(5.0).rotations(4)
+            .interval(1).duration(10).plugin(org.mockbukkit.mockbukkit.MockBukkit.createMockPlugin()).build();
+        assertNotNull(effect);
+        assertFalse(effect.isRunning());
+    }
+
+    @Test @DisplayName("all shapes play without error")
+    void allShapesPlay() {
+        allowParticles();
+        for (ShapeType type : ShapeType.values()) {
+            assertDoesNotThrow(() -> ParticleBuilder.shape(type).at(location).particle(Particle.FLAME).count(10).play());
+        }
+    }
+
+    @Test @DisplayName("all effects build without error")
+    void allEffectsBuild() {
+        allowParticles();
+        for (EffectType type : EffectType.values()) {
+            assertDoesNotThrow(() -> ParticleBuilder.effect(type).at(location).particle(Particle.FLAME).count(10).radius(3.0).plugin(org.mockbukkit.mockbukkit.MockBukkit.createMockPlugin()).build());
+        }
+    }
+
+    @Test @DisplayName("particle builder with color")
+    void particleWithColor() {
+        allowParticles();
+        assertDoesNotThrow(() -> ParticleBuilder.shape(ShapeType.CIRCLE).at(location).particle(Particle.DUST).color(Color.RED).count(10).play());
+    }
+
+    @Test @DisplayName("viewers filter")
+    void viewersFilter() {
+        allowParticles();
+        assertDoesNotThrow(() -> ParticleBuilder.shape(ShapeType.CIRCLE).at(location).particle(Particle.FLAME).count(5).viewers().play());
+    }
+
+    @Test @DisplayName("offset and speed applied")
+    void offsetAndSpeed() {
+        allowParticles();
+        assertDoesNotThrow(() -> ParticleBuilder.shape(ShapeType.SPHERE).at(location).particle(Particle.FLAME).count(10).offset(0.5, 0.5, 0.5).speed(0.1).play());
     }
 }

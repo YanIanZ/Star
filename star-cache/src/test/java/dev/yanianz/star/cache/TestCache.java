@@ -83,4 +83,68 @@ class TestCache {
         String fmt = MetricCollector.formatShort(cache.stats());
         assertTrue(fmt.contains("hit"));
     }
+
+    @Test
+    @DisplayName("CacheBuilder TTL expiration")
+    void cacheTTL() {
+        Cache<String, String> cache = CacheBuilder.<String, String>create().maxSize(10).expireAfterWrite(1, java.util.concurrent.TimeUnit.MILLISECONDS).build();
+        cache.put("a", "1");
+        assertEquals("1", cache.get("a"));
+        try { Thread.sleep(5); } catch (Exception ignored) {}
+        assertNull(cache.get("a"));
+    }
+
+    @Test
+    @DisplayName("Cache invalidateAll")
+    void invalidateAll() {
+        Cache<String, String> cache = CacheBuilder.<String, String>create().maxSize(10).build();
+        cache.put("a", "1"); cache.put("b", "2");
+        assertEquals(2, cache.size());
+        cache.invalidateAll();
+        assertEquals(0, cache.size());
+    }
+
+    @Test
+    @DisplayName("Cache keys returns set")
+    void cacheKeys() {
+        Cache<String, String> cache = CacheBuilder.<String, String>create().maxSize(10).build();
+        cache.put("a", "1"); cache.put("b", "2");
+        assertEquals(2, cache.keys().size());
+        assertTrue(cache.keys().contains("a"));
+    }
+
+    @Test
+    @DisplayName("LoadingCache delegates size")
+    void loadingCacheSize() {
+        Cache<String, String> cache = CacheBuilder.<String, String>create().maxSize(10).loader(k -> "val").build();
+        LoadingCache<String, String> lc = new LoadingCache<>(cache);
+        assertEquals(0, lc.size());
+        lc.get("key");
+        assertEquals(1, lc.size());
+    }
+
+    @Test
+    @DisplayName("ChunkCache API exists")
+    void chunkCache() {
+        Cache<Long, String> cache = CacheBuilder.<Long, String>create().maxSize(10).build();
+        ChunkCache<String> cc = new ChunkCache<>(cache);
+        assertNotNull(cc);
+    }
+
+    @Test
+    @DisplayName("CacheWarmup static method")
+    void cacheWarmup() {
+        Cache<String, String> cache = CacheBuilder.<String, String>create().maxSize(10).loader(k -> "loaded:" + k).build();
+        CacheWarmup.warmup(cache, "a", "b", "c");
+        assertEquals(3, cache.size());
+    }
+
+    @Test
+    @DisplayName("AsyncCacheOps API exists")
+    void asyncOps() {
+        Cache<String, String> cache = CacheBuilder.<String, String>create().maxSize(10).build();
+        cache.put("x", "1");
+        assertNotNull(AsyncCacheOps.getAsync(cache, "x"));
+        assertNotNull(AsyncCacheOps.putAsync(cache, "x", "2"));
+    }
 }

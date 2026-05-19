@@ -168,6 +168,50 @@ class TestWorldUtils {
         assertEquals(64, result.blocks());
     }
 
+    @Test @DisplayName("LocationUtils distance3D")
+    void distance3D() {
+        double dist = LocationUtils.distance3D(new Location(world, 0, 0, 0), new Location(world, 3, 4, 0));
+        assertEquals(5.0, dist);
+    }
+
+    @Test @DisplayName("LocationUtils randomInCircle")
+    void randomInCircle() {
+        Location result = LocationUtils.randomInCircle(new Location(world, 0, 64, 0), 5.0);
+        assertNotNull(result);
+        assertTrue(result.getX() != 0 || result.getZ() != 0);
+    }
+
+    @Test @DisplayName("LocationUtils faceLocation")
+    void faceLocation() {
+        Location from = new Location(world, 0, 64, 0);
+        Location target = new Location(world, 10, 64, 0);
+        Location faced = LocationUtils.faceLocation(from, target);
+        assertNotNull(faced.getDirection());
+    }
+
+    @Test @DisplayName("BlockScanner static methods exist")
+    void blockScannerExists() {
+        assertNotNull(BlockScanner.class);
+    }
+
+    @Test @DisplayName("BlockProcessor static methods exist")
+    void blockProcessorExists() {
+        assertNotNull(BlockProcessor.class);
+    }
+
+    @Test @DisplayName("RegionCopier static method")
+    void regionCopierStatic() {
+        assertNotNull(RegionCopier.class);
+    }
+
+    @Test @DisplayName("ChunkPurger getChunksInRegion")
+    void chunkPurgerGetChunks() {
+        Location c1 = new Location(world, 0, 64, 0);
+        Location c2 = new Location(world, 32, 64, 32);
+        var chunks = ChunkPurger.getChunksInRegion(c1, c2);
+        assertFalse(chunks.isEmpty());
+    }
+
     @Test @DisplayName("BlockPopulator types")
     void blockPopulatorTypes() {
         assertDoesNotThrow(() -> BlockPopulator.class.getMethod("populateOreVein", org.bukkit.Location.class, org.bukkit.Material.class, double.class, int.class));

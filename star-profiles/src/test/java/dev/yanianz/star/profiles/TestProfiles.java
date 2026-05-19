@@ -8,6 +8,19 @@ import org.junit.jupiter.api.*;
 
 @DisplayName("Profiles")
 class TestProfiles {
+    private static org.mockbukkit.mockbukkit.ServerMock server;
+
+    @BeforeAll
+    static void setUp() {
+        org.mockbukkit.mockbukkit.MockBukkit.mock();
+        server = org.mockbukkit.mockbukkit.MockBukkit.getOrCreateMock();
+    }
+
+    @AfterAll
+    static void tearDown() {
+        org.mockbukkit.mockbukkit.MockBukkit.unmock();
+    }
+
     @Test @DisplayName("ProfileData getters")
     void profileData() {
         ProfileData data = new ProfileData();
@@ -49,5 +62,36 @@ class TestProfiles {
     void profileCommand() {
         ProfileCommand cmd = new ProfileCommand(null);
         assertNotNull(cmd);
+    }
+
+    @Test @DisplayName("ProfileData boolean and int")
+    void profileDataTypes() {
+        ProfileData data = new ProfileData();
+        data.set("flag", "true");
+        data.set("count", "42");
+        assertTrue(data.getBoolean("flag"));
+        assertEquals(42, data.getInt("count"));
+        assertEquals(42.0, data.getDouble("count"));
+        assertFalse(data.getBoolean("missing"));
+    }
+
+    @Test @DisplayName("Profile with inventory")
+    void profileWithInventory() {
+        org.bukkit.inventory.ItemStack item = new org.bukkit.inventory.ItemStack(org.bukkit.Material.DIAMOND);
+        Profile p = Profile.builder("Rich").inventory(item).build();
+        assertEquals(1, p.getInventory().size());
+        assertEquals(org.bukkit.Material.DIAMOND, p.getInventory().get(0).getType());
+    }
+
+    @Test @DisplayName("ProfileManager getProfileNames")
+    void profileManagerNames() {
+        Server server = mock(Server.class);
+        when(server.getLogger()).thenReturn(java.util.logging.Logger.getLogger("test"));
+        Plugin plugin = mock(Plugin.class);
+        when(plugin.getServer()).thenReturn(server);
+        ProfileManager mgr = new ProfileManager(plugin);
+        org.bukkit.entity.Player player = mock(org.bukkit.entity.Player.class);
+        when(player.getUniqueId()).thenReturn(java.util.UUID.randomUUID());
+        assertEquals(0, mgr.getProfileCount(player));
     }
 }

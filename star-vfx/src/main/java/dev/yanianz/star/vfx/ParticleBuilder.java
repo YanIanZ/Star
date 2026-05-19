@@ -152,6 +152,7 @@ public final class ParticleBuilder {
             case EXPLOSION -> new ExplosionEffect(particle, count, location, radius, interval, duration, offsetX, offsetY, offsetZ, speed, color, viewers, plugin);
             case DEATH -> new DeathEffect(particle, count, location, radius, height, offsetX, offsetY, offsetZ, speed, color, viewers, plugin);
             case BLOCK_BREAK -> new BlockBreakEffect(particle, count, location, radius, offsetX, offsetY, offsetZ, speed, color, viewers, plugin);
+            case SPIRAL -> new SpiralEffect(plugin, particle, count, location, radius, height, rotations, interval, duration, offsetX, offsetY, offsetZ, speed, color, viewers);
         };
     }
 }

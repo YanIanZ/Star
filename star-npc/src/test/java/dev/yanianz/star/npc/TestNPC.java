@@ -9,9 +9,9 @@ class TestNPC {
     @DisplayName("NPCProfile creates identity")
     void profile() {
         NPCProfile profile = NPCProfile.of("Steve", "base64data");
-        assertEquals("Steve", profile.getName());
-        assertEquals("base64data", profile.getSkin());
-        assertNotNull(profile.getUuid());
+        assertEquals("Steve", profile.name());
+        assertEquals("base64data", profile.skin());
+        assertNotNull(profile.uuid());
     }
 
     @Test
@@ -39,6 +39,6 @@ class TestNPC {
     @DisplayName("NPCDialogue returns text")
     void dialogue() {
         NPCDialogue dlg = new NPCDialogue(net.kyori.adventure.text.Component.text("Hello!"));
-        assertEquals("Hello!", net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText().serialize(dlg.getText()));
+        assertEquals("Hello!", net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText().serialize(dlg.text()));
     }
 }

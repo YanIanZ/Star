@@ -151,6 +151,55 @@ class TestEconomyManager {
         assertFalse(bank.getMemberIds().contains(memberId));
     }
 
+    @Test @DisplayName("TransactionResult ok/fail factory methods")
+    void transactionResultFactories() {
+        TransactionResult ok = TransactionResult.ok(500.0, 4500.0, "Deposited");
+        assertTrue(ok.success());
+        assertEquals(500.0, ok.amount());
+        assertEquals(4500.0, ok.newBalance());
+        assertEquals("Deposited", ok.message());
+
+        TransactionResult fail = TransactionResult.fail("Insufficient funds");
+        assertFalse(fail.success());
+        assertEquals(0.0, fail.amount());
+
+        TransactionResult okNoMsg = TransactionResult.ok(100.0, 900.0);
+        assertEquals("", okNoMsg.message());
+    }
+
+    @Test @DisplayName("TransactionEntry all fields")
+    void transactionEntryFields() {
+        UUID id = UUID.randomUUID();
+        long ts = System.currentTimeMillis();
+        TransactionEntry entry = new TransactionEntry(id, TransactionType.DEPOSIT, 250.0, "Salary", "$250.00", ts);
+        assertEquals(id, entry.playerId());
+        assertEquals(TransactionType.DEPOSIT, entry.type());
+        assertEquals(250.0, entry.amount());
+        assertEquals("Salary", entry.reason());
+        assertEquals("$250.00", entry.formattedAmount());
+        assertEquals(ts, entry.timestamp());
+    }
+
+    @Test @DisplayName("CurrencyFormatter format delegates to provider")
+    void currencyFormatterDelegation() {
+        EconomyProvider p = new AbstractEconomyProvider() {
+            @Override public String getName() { return "test"; }
+            @Override public boolean hasAccount(OfflinePlayer pl) { return true; }
+            @Override public double getBalance(OfflinePlayer pl) { return 0; }
+            @Override public boolean setBalance(OfflinePlayer pl, double a) { return true; }
+        };
+        String formatted = CurrencyFormatter.format(p, 1500.50);
+        assertNotNull(formatted);
+    }
+
+    @Test @DisplayName("TransactionType enum values")
+    void transactionTypeEnum() {
+        assertEquals(3, TransactionType.values().length);
+        assertNotNull(TransactionType.DEPOSIT);
+        assertNotNull(TransactionType.WITHDRAW);
+        assertNotNull(TransactionType.SET);
+    }
+
     @Test @DisplayName("Bank isOwner and isMember work")
     void bankOwnerMember() {
         org.mockbukkit.mockbukkit.MockBukkit.mock();

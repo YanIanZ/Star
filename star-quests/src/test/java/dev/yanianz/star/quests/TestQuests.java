@@ -80,4 +80,41 @@ class TestQuests {
         mgr.register(q);
         assertTrue(mgr.get("Q").isPresent());
     }
+
+    @Test
+    @DisplayName("ObjectiveType enum count")
+    void objectiveTypeCount() {
+        assertEquals(10, ObjectiveType.values().length);
+    }
+
+    @Test
+    @DisplayName("QuestReward static factories")
+    void questRewardFactories() {
+        assertEquals(RewardType.XP, QuestReward.xp(500).type());
+        assertEquals(RewardType.MONEY, QuestReward.money(1000).type());
+        assertEquals(RewardType.ITEM, QuestReward.item("DIAMOND", 3).type());
+        assertEquals(RewardType.COMMAND, QuestReward.command("give diamond").type());
+    }
+
+    @Test
+    @DisplayName("QuestChain parallel")
+    void questChainParallel() {
+        QuestChain chain = QuestChain.parallel("A", "B", "C");
+        assertFalse(chain.isSequential());
+        assertEquals(3, chain.getQuestNames().size());
+    }
+
+    @Test
+    @DisplayName("QuestTrigger listener registers")
+    void questTrigger() {
+        Plugin plugin = mock(Plugin.class);
+        Server server = mock(Server.class);
+        org.bukkit.plugin.PluginManager pm = mock(org.bukkit.plugin.PluginManager.class);
+        when(server.getLogger()).thenReturn(Logger.getGlobal());
+        when(server.getPluginManager()).thenReturn(pm);
+        when(plugin.getServer()).thenReturn(server);
+        QuestManager mgr = new QuestManager(plugin);
+        QuestTrigger trigger = new QuestTrigger(mgr, plugin);
+        assertNotNull(trigger);
+    }
 }

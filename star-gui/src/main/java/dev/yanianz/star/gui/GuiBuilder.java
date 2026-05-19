@@ -9,6 +9,7 @@ import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 /**
  * Fluent builder for constructing {@link Gui} instances.
@@ -18,6 +19,7 @@ public final class GuiBuilder {
     private final Component title;
     private final int rows;
     private final Map<Integer, GuiItem> slotItems = new HashMap<>();
+    private final Map<Integer, Supplier<ItemStack>> dynamicSlots = new HashMap<>();
     private Consumer<InventoryCloseEvent> closeHandler;
     private boolean draggable = false;
     private ItemStack fillItem;
@@ -46,6 +48,13 @@ public final class GuiBuilder {
         for (int index : indices) {
             slotItems.put(index, new GuiItem(item.clone(), handler));
         }
+        return this;
+    }
+
+    @Nonnull
+    public GuiBuilder dynamicSlot(int index, @Nonnull Supplier<ItemStack> supplier, @Nonnull Consumer<GuiClickEvent> handler) {
+        dynamicSlots.put(index, supplier);
+        slotItems.put(index, new GuiItem(supplier.get(), handler));
         return this;
     }
 
@@ -102,7 +111,7 @@ public final class GuiBuilder {
 
     @Nonnull
     public Gui build() {
-        return new Gui(title, rows, slotItems, closeHandler, draggable, fillItem);
+        return new Gui(title, rows, slotItems, closeHandler, draggable, fillItem, dynamicSlots);
     }
 
     /**

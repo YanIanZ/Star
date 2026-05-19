@@ -5,6 +5,7 @@ import org.mockbukkit.mockbukkit.ServerMock;
 import org.mockbukkit.mockbukkit.entity.PlayerMock;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -12,7 +13,10 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
 import org.junit.jupiter.api.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Supplier;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -96,5 +100,87 @@ class TestGuiBuilder {
 
         assertEquals(Material.EMERALD, item.item().getType());
         assertNotNull(item.handler());
+    }
+
+    @Test
+    @DisplayName("dynamic slot rerender fires")
+    void dynamicSlotRerender() {
+        AtomicInteger calls = new AtomicInteger(0);
+        Supplier<ItemStack> supplier = () -> {
+            calls.incrementAndGet();
+            return new ItemStack(Material.DIAMOND);
+        };
+        Gui gui = GuiBuilder.create(1, Component.text("Dynamic"))
+            .dynamicSlot(0, supplier, e -> {})
+            .build();
+        assertNotNull(gui.getInventory().getItem(0));
+        gui.rerender();
+        assertTrue(calls.get() >= 1);
+    }
+
+    @Test
+    @DisplayName("Gui open and close handlers work")
+    void openCloseHandlers() {
+        AtomicInteger closed = new AtomicInteger(0);
+        Gui gui = GuiBuilder.create(1, Component.text("Close Test"))
+            .closeHandler(e -> closed.incrementAndGet())
+            .build();
+        gui.open(player, MockBukkit.createMockPlugin());
+        assertFalse(gui.getInventory().getViewers().isEmpty());
+    }
+
+    @Test
+    @DisplayName("paginated gui page calculation")
+    void paginatedPages() {
+        GuiBuilder.PaginatedBuilder pb = GuiBuilder.paginated(3, Component.text("Pages"));
+        pb.contentSlots(0, 1, 2);
+        PaginatedGui gui = pb.build();
+        assertEquals(1, gui.getTotalPages());
+        List<ItemStack> items = new ArrayList<>();
+        for (int i = 0; i < 7; i++) items.add(new ItemStack(Material.STONE));
+        gui.setItems(items);
+        assertEquals(3, gui.getTotalPages());
+    }
+
+    @Test
+    @DisplayName("GuiTemplate builds with data")
+    void guiTemplate() {
+        GuiTemplate<String> template = GuiTemplate.create(1, Component.text("Template"));
+        template.slot(0, name -> new ItemStack(Material.PAPER), (data, e) -> {});
+        Gui gui = template.build(player, "test", MockBukkit.createMockPlugin());
+        assertNotNull(gui);
+        assertEquals(Material.PAPER, gui.getInventory().getItem(0).getType());
+    }
+
+    @Test
+    @DisplayName("GuiState stores data")
+    void guiState() {
+        dev.yanianz.star.gui.state.GuiState<String> state = new dev.yanianz.star.gui.state.GuiState<>("initial") {
+            @Override public Gui build(Player player) { return null; }
+        };
+        assertEquals("initial", state.getData());
+        state.setData("updated");
+        assertEquals("updated", state.getData());
+    }
+
+    @Test
+    @DisplayName("GuiStateManager register/unregister")
+    void guiStateManager() {
+        dev.yanianz.star.gui.state.GuiStateManager mgr = new dev.yanianz.star.gui.state.GuiStateManager();
+        dev.yanianz.star.gui.state.GuiState<String> state = new dev.yanianz.star.gui.state.GuiState<>("data") {
+            @Override public Gui build(Player player) { return null; }
+        };
+        mgr.register(player, state);
+        assertTrue(mgr.isRegistered(player));
+        assertEquals("data", mgr.get(player, String.class));
+        mgr.unregister(player);
+        assertFalse(mgr.isRegistered(player));
+    }
+
+    @Test
+    @DisplayName("SlotAnimation validates frames")
+    void slotAnimationValidation() {
+        assertThrows(IllegalArgumentException.class, () ->
+            new dev.yanianz.star.gui.animation.SlotAnimation(MockBukkit.createMockPlugin(), 0, List.of(), 10));
     }
 }

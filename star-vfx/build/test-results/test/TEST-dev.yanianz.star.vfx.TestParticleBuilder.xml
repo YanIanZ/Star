@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="ParticleBuilder" tests="6" skipped="0" failures="0" errors="0" timestamp="2026-05-18T10:48:03.937Z" hostname="iYans-MacBook-Air.local" time="1.232">
+<testsuite name="ParticleBuilder" tests="12" skipped="0" failures="0" errors="0" timestamp="2026-05-19T17:38:12.031Z" hostname="iYans-MacBook-Air.local" time="4.674">
   <properties/>
-  <testcase name="throws when location not set" classname="dev.yanianz.star.vfx.TestParticleBuilder" time="1.161"/>
-  <testcase name="builds all shape types without error" classname="dev.yanianz.star.vfx.TestParticleBuilder" time="0.05"/>
-  <testcase name="builds circle shape and plays without error" classname="dev.yanianz.star.vfx.TestParticleBuilder" time="0.004"/>
-  <testcase name="static utils do not throw" classname="dev.yanianz.star.vfx.TestParticleBuilder" time="0.006"/>
-  <testcase name="builds sphere shape" classname="dev.yanianz.star.vfx.TestParticleBuilder" time="0.005"/>
-  <testcase name="effect builds without error" classname="dev.yanianz.star.vfx.TestParticleBuilder" time="0.004"/>
+  <testcase name="throws when location not set" classname="dev.yanianz.star.vfx.TestParticleBuilder" time="4.373"/>
+  <testcase name="particle builder with color" classname="dev.yanianz.star.vfx.TestParticleBuilder" time="0.094"/>
+  <testcase name="builds all shape types without error" classname="dev.yanianz.star.vfx.TestParticleBuilder" time="0.03"/>
+  <testcase name="spiral effect builds" classname="dev.yanianz.star.vfx.TestParticleBuilder" time="0.052"/>
+  <testcase name="builds circle shape and plays without error" classname="dev.yanianz.star.vfx.TestParticleBuilder" time="0.01"/>
+  <testcase name="all shapes play without error" classname="dev.yanianz.star.vfx.TestParticleBuilder" time="0.02"/>
+  <testcase name="all effects build without error" classname="dev.yanianz.star.vfx.TestParticleBuilder" time="0.03"/>
+  <testcase name="static utils do not throw" classname="dev.yanianz.star.vfx.TestParticleBuilder" time="0.015"/>
+  <testcase name="builds sphere shape" classname="dev.yanianz.star.vfx.TestParticleBuilder" time="0.012"/>
+  <testcase name="offset and speed applied" classname="dev.yanianz.star.vfx.TestParticleBuilder" time="0.006"/>
+  <testcase name="effect builds without error" classname="dev.yanianz.star.vfx.TestParticleBuilder" time="0.012"/>
+  <testcase name="viewers filter" classname="dev.yanianz.star.vfx.TestParticleBuilder" time="0.008"/>
   <system-out><![CDATA[Mockito is currently self-attaching to enable the inline-mock-maker. This will no longer work in future releases of the JDK. Please add Mockito as an agent to your build what is described in Mockito's documentation: https://javadoc.io/doc/org.mockito/mockito-core/latest/org/mockito/Mockito.html#0.3
 Mockito is currently self-attaching to enable the inline-mock-maker. This will no longer work in future releases of the JDK. Please add Mockito as an agent to your build what is described in Mockito's documentation: https://javadoc.io/doc/org.mockito/mockito-core/latest/org/mockito/Mockito.html#0.3
 ]]></system-out>

@@ -18,6 +18,7 @@ import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 /**
  * A GUI wrapper around a Bukkit {@link Inventory} with click handling.
@@ -26,6 +27,7 @@ public class Gui implements Listener {
 
     private final Inventory inventory;
     protected final Map<Integer, GuiItem> slotItems;
+    private final Map<Integer, Supplier<ItemStack>> dynamicSlots;
     private final Consumer<InventoryCloseEvent> closeHandler;
     private final boolean draggable;
     private final ItemStack fillItem;
@@ -33,12 +35,13 @@ public class Gui implements Listener {
 
     Gui(@Nonnull Component title, int rows, @Nonnull Map<Integer, GuiItem> slotItems,
         @Nullable Consumer<InventoryCloseEvent> closeHandler, boolean draggable,
-        @Nullable ItemStack fillItem) {
+        @Nullable ItemStack fillItem, @Nonnull Map<Integer, Supplier<ItemStack>> dynamicSlots) {
         this.inventory = Bukkit.createInventory(null, rows * 9, title);
         this.slotItems = new HashMap<>(slotItems);
         this.closeHandler = closeHandler;
         this.draggable = draggable;
         this.fillItem = fillItem;
+        this.dynamicSlots = dynamicSlots;
 
         for (Map.Entry<Integer, GuiItem> entry : slotItems.entrySet()) {
             inventory.setItem(entry.getKey(), entry.getValue().item());
@@ -119,6 +122,15 @@ public class Gui implements Listener {
     public void refresh() {
         for (Map.Entry<Integer, GuiItem> entry : slotItems.entrySet()) {
             inventory.setItem(entry.getKey(), entry.getValue().item());
+        }
+    }
+
+    public void rerender() {
+        for (Map.Entry<Integer, Supplier<ItemStack>> entry : dynamicSlots.entrySet()) {
+            ItemStack newItem = entry.getValue().get();
+            inventory.setItem(entry.getKey(), newItem);
+            GuiItem existing = slotItems.get(entry.getKey());
+            if (existing != null) slotItems.put(entry.getKey(), new GuiItem(newItem, existing.handler()));
         }
     }
 }

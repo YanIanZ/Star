@@ -21,7 +21,6 @@ dependencies {
     implementation(project(":star-gui"))
     implementation(project(":star-vfx"))
     implementation(project(":star-economy"))
-    implementation(project(":star-commands"))
     implementation(project(":star-world"))
     implementation(project(":star-holograms"))
     implementation(project(":star-database"))

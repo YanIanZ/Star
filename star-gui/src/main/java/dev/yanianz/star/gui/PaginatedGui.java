@@ -38,7 +38,7 @@ public class PaginatedGui extends Gui {
                  @Nullable ItemStack nextPageItem, @Nullable ItemStack prevPageItem,
                  @Nullable ItemStack emptyPageItem, @Nullable Consumer<InventoryCloseEvent> closeHandler,
                  boolean draggable) {
-        super(title, rows, new HashMap<>(), closeHandler, draggable, null);
+        super(title, rows, new HashMap<>(), closeHandler, draggable, null, new HashMap<>());
         this.title = title;
         this.rows = rows;
         this.staticItems = staticItems;

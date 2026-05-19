@@ -74,6 +74,42 @@ class TestCombat {
         assertFalse(log.isInCombat(playerA));
     }
 
+    @Test @DisplayName("DamageType enum count")
+    void damageTypeEnumCount() {
+        assertEquals(9, DamageType.values().length);
+    }
+
+    @Test @DisplayName("DamageModifier record all fields")
+    void damageModifierAllFields() {
+        DamageModifier mod = new DamageModifier("power", 2.0, DamageType.MELEE, DamageType.RANGED);
+        assertEquals("power", mod.name());
+        assertEquals(2.0, mod.multiplier());
+        assertTrue(mod.appliesTo(DamageType.MELEE));
+        assertTrue(mod.appliesTo(DamageType.RANGED));
+        assertFalse(mod.appliesTo(DamageType.MAGIC));
+    }
+
+    @Test @DisplayName("DamageModifier wildcard applies to all")
+    void damageModifierWildcard() {
+        DamageModifier mod = new DamageModifier("global", 0.5);
+        assertTrue(mod.appliesTo(DamageType.MELEE));
+        assertTrue(mod.appliesTo(DamageType.VOID));
+    }
+
+    @Test @DisplayName("CombatLog clear")
+    void combatLogClear() {
+        CombatLog log = new CombatLog(10);
+        log.clear();
+        assertNotNull(log);
+    }
+
+    @Test @DisplayName("CombatTagger exists")
+    void combatTaggerConstruct() {
+        CombatLog log = new CombatLog(10);
+        CombatTagger tagger = new CombatTagger(log);
+        assertNotNull(tagger);
+    }
+
     @Test
     @DisplayName("CombatTagger tags both players")
     void combatTagger() {

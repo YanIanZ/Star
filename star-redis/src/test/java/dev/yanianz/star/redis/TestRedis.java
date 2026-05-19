@@ -58,4 +58,26 @@ class TestRedis {
         mgr.del("key");
         assertFalse(mgr.exists("key"));
     }
+
+    @Test @DisplayName("RedisSession api exists")
+    void redisSession() {
+        RedisSession session = new RedisSession(null, "test");
+        assertNotNull(session);
+    }
+
+    @Test @DisplayName("RedisCache setRaw with ttl")
+    void cacheSetTTL() {
+        RedisCache<String> cache = new RedisCache<>(new RedisManager(null, RedisConfig.defaults("localhost")), "test");
+        cache.setRaw("key", "value", 60);
+        assertNotNull(cache);
+    }
+
+    @Test @DisplayName("RedisManager hash operations")
+    void managerHashOps() {
+        RedisManager mgr = new RedisManager(null, RedisConfig.defaults("localhost"));
+        assertTrue(mgr.hgetAll("none").isEmpty());
+        mgr.hset("k", "f", "v");
+        assertNull(mgr.hget("k", "f"));
+        mgr.del("k");
+    }
 }
