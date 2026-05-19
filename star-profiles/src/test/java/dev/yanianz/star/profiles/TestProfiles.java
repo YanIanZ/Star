@@ -49,7 +49,8 @@ class TestProfiles {
         when(server.getLogger()).thenReturn(java.util.logging.Logger.getLogger("test"));
         Plugin plugin = mock(Plugin.class);
         when(plugin.getServer()).thenReturn(server);
-        ProfileManager mgr = new ProfileManager(plugin);
+        dev.yanianz.star.profiles.storage.ProfileRepository repo = mock(dev.yanianz.star.profiles.storage.ProfileRepository.class);
+        ProfileManager mgr = new ProfileManager(plugin, repo);
         assertNotNull(mgr);
     }
 
@@ -89,7 +90,8 @@ class TestProfiles {
         when(server.getLogger()).thenReturn(java.util.logging.Logger.getLogger("test"));
         Plugin plugin = mock(Plugin.class);
         when(plugin.getServer()).thenReturn(server);
-        ProfileManager mgr = new ProfileManager(plugin);
+        dev.yanianz.star.profiles.storage.ProfileRepository repo = mock(dev.yanianz.star.profiles.storage.ProfileRepository.class);
+        ProfileManager mgr = new ProfileManager(plugin, repo);
         org.bukkit.entity.Player player = mock(org.bukkit.entity.Player.class);
         when(player.getUniqueId()).thenReturn(java.util.UUID.randomUUID());
         assertEquals(0, mgr.getProfileCount(player));
