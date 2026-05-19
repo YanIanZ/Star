@@ -3,6 +3,7 @@ package dev.yanianz.star.profiles;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import dev.yanianz.star.common.StarLogger;
+import java.io.File;
 import org.bukkit.Server;
 import org.bukkit.plugin.Plugin;
 import org.junit.jupiter.api.*;
@@ -109,5 +110,17 @@ class TestProfiles {
         StarLogger logger = mock(StarLogger.class);
         ProfileListener listener = new ProfileListener(mgr, logger);
         assertNotNull(listener);
+    }
+
+    @Test @DisplayName("ProfileModule is created without Redis")
+    void profileModule() {
+        com.mongodb.client.MongoDatabase mongoDb = mock(com.mongodb.client.MongoDatabase.class);
+        Server server = mock(Server.class);
+        when(server.getLogger()).thenReturn(java.util.logging.Logger.getLogger("test"));
+        Plugin plugin = mock(Plugin.class);
+        when(plugin.getServer()).thenReturn(server);
+        ProfileModule module = new ProfileModule(plugin, mongoDb, null, new File("."), "test", 1800, 300);
+        assertNotNull(module.getManager());
+        assertNotNull(module.getListener());
     }
 }
