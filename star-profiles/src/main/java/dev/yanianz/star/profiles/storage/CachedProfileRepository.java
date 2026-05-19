@@ -59,18 +59,24 @@ public final class CachedProfileRepository implements ProfileRepository {
         return playerUuid + ":__all__";
     }
 
+    private String genKey(UUID playerUuid) {
+        return playerUuid + ":__gen__";
+    }
+
     @Override @Nonnull
     public CompletableFuture<Void> save(@Nonnull UUID playerUuid, @Nonnull Profile profile) {
         return delegate.save(playerUuid, profile).thenRun(() -> {
             cache.setRaw(cacheKey(playerUuid, profile.getName()), GSON.toJson(profile), ttlSeconds);
             cache.del(listCacheKey(playerUuid));
+            cache.del(genKey(playerUuid));
         });
     }
 
     @Override @Nonnull
     public CompletableFuture<Optional<Profile>> load(@Nonnull UUID playerUuid, @Nonnull String profileName) {
         String raw = cache.getRaw(cacheKey(playerUuid, profileName));
-        if (raw != null) {
+        String gen = cache.getRaw(genKey(playerUuid));
+        if (raw != null && gen == null) {
             return CompletableFuture.completedFuture(Optional.of(GSON.fromJson(raw, Profile.class)));
         }
         return delegate.load(playerUuid, profileName).thenApply(opt -> {
@@ -97,13 +103,15 @@ public final class CachedProfileRepository implements ProfileRepository {
         return delegate.delete(playerUuid, profileName).thenRun(() -> {
             cache.del(cacheKey(playerUuid, profileName));
             cache.del(listCacheKey(playerUuid));
+            cache.del(genKey(playerUuid));
         });
     }
 
     @Override @Nonnull
     public CompletableFuture<Void> deleteAll(@Nonnull UUID playerUuid) {
-        return delegate.deleteAll(playerUuid).thenRun(() ->
-            cache.del(listCacheKey(playerUuid))
-        );
+        return delegate.deleteAll(playerUuid).thenRun(() -> {
+            cache.del(listCacheKey(playerUuid));
+            cache.setRaw(genKey(playerUuid), "1", ttlSeconds);
+        });
     }
 }
