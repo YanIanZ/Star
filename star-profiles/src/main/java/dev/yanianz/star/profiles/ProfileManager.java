@@ -16,6 +16,7 @@ public final class ProfileManager {
     private final ProfileRepository repository;
     private final Map<UUID, Map<String, Profile>> playerProfiles = new ConcurrentHashMap<>();
     private final Map<UUID, String> activeProfiles = new ConcurrentHashMap<>();
+    private int autoSaveTaskId = -1;
 
     public ProfileManager(@Nonnull Plugin plugin, @Nonnull ProfileRepository repository) {
         this.plugin = plugin;
@@ -100,5 +101,28 @@ public final class ProfileManager {
     public void evict(@Nonnull UUID playerUuid) {
         playerProfiles.remove(playerUuid);
         activeProfiles.remove(playerUuid);
+    }
+
+    public void startAutoSave(int intervalSeconds) {
+        if (autoSaveTaskId != -1) return;
+        autoSaveTaskId = plugin.getServer().getScheduler().runTaskTimerAsynchronously(
+            plugin,
+            () -> {
+                for (UUID uuid : playerProfiles.keySet()) {
+                    saveAll(uuid);
+                }
+            },
+            20L * intervalSeconds,
+            20L * intervalSeconds
+        ).getTaskId();
+        logger.log(Level.INFO, "Auto-save started with interval " + intervalSeconds + "s");
+    }
+
+    public void stopAutoSave() {
+        if (autoSaveTaskId != -1) {
+            plugin.getServer().getScheduler().cancelTask(autoSaveTaskId);
+            autoSaveTaskId = -1;
+            logger.log(Level.INFO, "Auto-save stopped");
+        }
     }
 }
