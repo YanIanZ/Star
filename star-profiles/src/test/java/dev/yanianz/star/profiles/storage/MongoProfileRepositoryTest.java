@@ -1,7 +1,6 @@
 package dev.yanianz.star.profiles.storage;
 
 import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.model.IndexOptions;
@@ -38,14 +37,13 @@ class MongoProfileRepositoryTest {
 
     @Test
     @DisplayName("Has no profiles for unknown player")
+    @SuppressWarnings("unchecked")
     void noProfiles() {
         MongoDatabase db = mock(MongoDatabase.class);
-        com.mongodb.client.ListCollectionNamesIterable namesIterable =
-            mock(com.mongodb.client.ListCollectionNamesIterable.class);
-        when(db.listCollectionNames()).thenReturn(namesIterable);
-        MongoCursor<String> cursor = mock(MongoCursor.class);
-        when(cursor.hasNext()).thenReturn(false);
-        when(namesIterable.iterator()).thenReturn(cursor);
+        MongoCollection<Document> coll = mock(MongoCollection.class);
+        when(db.getCollection(anyString())).thenReturn(coll);
+        when(coll.createIndex(any(Bson.class), any(IndexOptions.class))).thenReturn("idx");
+        when(coll.countDocuments()).thenReturn(0L);
         StarLogger logger = mock(StarLogger.class);
         MongoProfileRepository repo = new MongoProfileRepository(db, "test", logger);
         assertFalse(repo.hasProfiles(UUID.randomUUID()));

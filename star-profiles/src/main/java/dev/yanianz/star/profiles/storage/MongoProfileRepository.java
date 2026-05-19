@@ -7,8 +7,6 @@ import com.mongodb.client.model.IndexOptions;
 import com.mongodb.client.model.ReplaceOptions;
 import dev.yanianz.star.common.StarLogger;
 import dev.yanianz.star.profiles.Profile;
-import dev.yanianz.star.profiles.ProfileData;
-import dev.yanianz.star.profiles.ProfileInventory;
 import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -23,6 +21,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -32,6 +31,7 @@ public final class MongoProfileRepository implements ProfileRepository {
     private final String serverId;
     private final StarLogger logger;
     private static final String COLLECTION_PREFIX = "profiles_";
+    private final Set<UUID> indexedCollections = ConcurrentHashMap.newKeySet();
 
     public MongoProfileRepository(@Nonnull MongoDatabase database, @Nonnull String serverId, @Nonnull StarLogger logger) {
         this.database = database;
@@ -47,8 +47,10 @@ public final class MongoProfileRepository implements ProfileRepository {
     @Nonnull
     private MongoCollection<Document> collection(@Nonnull UUID playerUuid) {
         MongoCollection<Document> coll = database.getCollection(collectionName(playerUuid));
-        coll.createIndex(new Document("serverId", 1), new IndexOptions().background(true));
-        coll.createIndex(new Document("updatedAt", 1), new IndexOptions().background(true));
+        if (indexedCollections.add(playerUuid)) {
+            coll.createIndex(new Document("serverId", 1), new IndexOptions().background(true));
+            coll.createIndex(new Document("updatedAt", 1), new IndexOptions().background(true));
+        }
         return coll;
     }
 
@@ -130,7 +132,7 @@ public final class MongoProfileRepository implements ProfileRepository {
 
         List<String> inventoryB64 = new ArrayList<>();
         for (ItemStack item : profile.getInventory()) {
-            inventoryB64.add(item != null ? itemStackToBase64(item) : null);
+            inventoryB64.add(item != null ? itemStackToBase64(item) : "");
         }
         doc.put("inventory", inventoryB64);
 
@@ -162,9 +164,11 @@ public final class MongoProfileRepository implements ProfileRepository {
         List<String> inventoryB64 = doc.getList("inventory", String.class);
         if (inventoryB64 != null) {
             for (String b64 : inventoryB64) {
-                if (b64 != null) {
+                if (b64 != null && !b64.isEmpty()) {
                     ItemStack item = itemStackFromBase64(b64);
-                    if (item != null) builder.inventory(item);
+                    builder.inventory(item != null ? item : (ItemStack) null);
+                } else {
+                    builder.inventory((ItemStack) null);
                 }
             }
         }
@@ -186,32 +190,31 @@ public final class MongoProfileRepository implements ProfileRepository {
     }
 
     private static String itemStackToBase64(ItemStack item) {
-        try {
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            BukkitObjectOutputStream boos = new BukkitObjectOutputStream(baos);
+        try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
+             BukkitObjectOutputStream boos = new BukkitObjectOutputStream(baos)) {
             boos.writeObject(item);
-            boos.close();
+            boos.flush();
             return Base64.getEncoder().encodeToString(baos.toByteArray());
         } catch (IOException e) {
-            return "";
+            return null;
         }
     }
 
     private static ItemStack itemStackFromBase64(String base64) {
+        if (base64 == null) return null;
         try {
             byte[] bytes = Base64.getDecoder().decode(base64);
-            ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
-            BukkitObjectInputStream bois = new BukkitObjectInputStream(bais);
-            return (ItemStack) bois.readObject();
+            try (ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
+                 BukkitObjectInputStream bois = new BukkitObjectInputStream(bais)) {
+                return (ItemStack) bois.readObject();
+            }
         } catch (IOException | ClassNotFoundException e) {
             return null;
         }
     }
 
     public boolean hasProfiles(@Nonnull UUID playerUuid) {
-        for (String name : database.listCollectionNames()) {
-            if (name.equals(collectionName(playerUuid))) return true;
-        }
-        return false;
+        MongoCollection<Document> coll = database.getCollection(collectionName(playerUuid));
+        return coll.countDocuments() > 0;
     }
 }
