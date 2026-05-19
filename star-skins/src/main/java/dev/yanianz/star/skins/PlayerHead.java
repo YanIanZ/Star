@@ -13,10 +13,7 @@ import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
-import com.mojang.authlib.GameProfile;
-
 import dev.yanianz.star.skins.nms.PlayerHeadAdapter;
-import dev.yanianz.star.versions.UnknownServerVersionException;
 
 public final class PlayerHead {
 
@@ -49,13 +46,7 @@ public final class PlayerHead {
     public static @Nonnull ItemStack getItemStack(@Nonnull PlayerSkin skin) {
         Validate.notNull(skin, "The skin can not be null!");
 
-        return getItemStack(meta -> {
-            try {
-                skin.getProfile().apply(meta);
-            } catch (NoSuchFieldException | IllegalAccessException | UnknownServerVersionException e) {
-                e.printStackTrace();
-            }
-        });
+        return getItemStack(meta -> skin.getProfile().apply(meta));
     }
 
     private static @Nonnull ItemStack getItemStack(@Nonnull Consumer<SkullMeta> consumer) {
@@ -79,8 +70,7 @@ public final class PlayerHead {
         }
 
         try {
-            GameProfile profile = skin.getProfile();
-            adapter.setGameProfile(block, profile, sendBlockUpdate);
+            adapter.setGameProfile(block, skin.getProfile().getGameProfile(), sendBlockUpdate);
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }

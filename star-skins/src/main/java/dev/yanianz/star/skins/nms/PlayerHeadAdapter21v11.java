@@ -24,13 +24,19 @@ class PlayerHeadAdapter21v11 implements PlayerHeadAdapter {
         Class<?> resolvableProfile = ReflectionUtils.getNetMinecraftClass("world.item.component.ResolvableProfile");
         newResolvableProfile = ReflectionUtils.getConstructor(resolvableProfile, GameProfile.class);
 
-        setOwner = ReflectionUtils.getNetMinecraftClass("world.level.block.entity.TileEntitySkull").getMethod("a", resolvableProfile);
+        Class<?> skullBlockEntity = ReflectionUtils.getNetMinecraftClass("world.level.block.entity.SkullBlockEntity");
+        setOwner = getSkullMethod(skullBlockEntity, "setOwner", resolvableProfile);
+
         getHandle = ReflectionUtils.getOBCClass("CraftWorld").getMethod("getHandle");
 
         Class<?> blockPosition = ReflectionUtils.getNetMinecraftClass("core.BlockPosition");
         newPosition = ReflectionUtils.getConstructor(blockPosition, int.class, int.class, int.class);
 
         getTileEntity = ReflectionUtils.getNMSClass("level.WorldServer").getMethod("getBlockEntity", blockPosition, boolean.class);
+    }
+
+    private static Method getSkullMethod(Class<?> clazz, String name, Class<?>... params) throws NoSuchMethodException {
+        return clazz.getMethod(name, params);
     }
 
     @ParametersAreNonnullByDefault
