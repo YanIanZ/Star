@@ -1,5 +1,10 @@
 package dev.yanianz.star.commands;
 
+import dev.yanianz.star.commands.condition.CommandCondition;
+import dev.yanianz.star.commands.condition.CooldownCondition;
+import dev.yanianz.star.commands.condition.PlayerOnlyCondition;
+import dev.yanianz.star.commands.flag.Flag;
+import dev.yanianz.star.commands.middleware.CommandMiddleware;
 import org.bukkit.command.CommandSender;
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -21,14 +26,21 @@ public final class CommandBuilder {
     private String description;
     private final List<CommandNode.ArgDef> args = new ArrayList<>();
     private final Map<String, CommandNode.TabCompleter> tabCompleters = new HashMap<>();
+    private final List<CommandCondition> conditions = new ArrayList<>();
+    private final List<CommandMiddleware> middleware = new ArrayList<>();
+    private final List<Flag> flags = new ArrayList<>();
     private Consumer<CommandContext> executor;
     private CommandManager manager;
+    private CooldownManager cooldownManager;
 
     public CommandBuilder(@Nonnull String name) {
         this.name = name;
     }
 
-    void setManager(@Nonnull CommandManager manager) { this.manager = manager; }
+    void setManager(@Nonnull CommandManager manager) {
+        this.manager = manager;
+        this.cooldownManager = manager.cooldowns();
+    }
 
     @Nonnull public CommandBuilder aliases(@Nonnull String... aliases) { Collections.addAll(this.aliases, aliases); return this; }
     @Nonnull public CommandBuilder permission(@Nonnull String perm) { this.permission = perm; return this; }
@@ -51,9 +63,15 @@ public final class CommandBuilder {
         this.executor = executor; return this;
     }
 
+    @Nonnull public CommandBuilder condition(@Nonnull CommandCondition c) { conditions.add(c); return this; }
+    @Nonnull public CommandBuilder playerOnly() { conditions.add(new PlayerOnlyCondition()); return this; }
+    @Nonnull public CommandBuilder cooldown(int seconds) { if (cooldownManager != null) conditions.add(new CooldownCondition(seconds, cooldownManager)); return this; }
+    @Nonnull public CommandBuilder middleware(@Nonnull CommandMiddleware m) { middleware.add(m); return this; }
+    @Nonnull public CommandBuilder flag(@Nonnull String name, @Nonnull ArgumentType<?> type, @Nonnull String shortAlias) { flags.add(new Flag(name, type, shortAlias)); return this; }
+
     @Nonnull public CommandNode build() {
         if (executor == null) throw new IllegalStateException("executor is required");
-        return new CommandNode(name, aliases, permission, usage, description, executor, args, tabCompleters);
+        return new CommandNode(name, aliases, permission, usage, description, executor, args, tabCompleters, conditions, middleware, flags);
     }
 
     public void register() {

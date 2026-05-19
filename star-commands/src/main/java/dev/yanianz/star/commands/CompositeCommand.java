@@ -56,11 +56,11 @@ public final class CompositeCommand {
             return true;
         }
 
-        CommandContext ctx = new CommandContext(sender, subCommand.isEmpty() ? alias : subCommand, subArgs);
+        CommandContext ctx = new CommandContext(sender, subCommand.isEmpty() ? alias : subCommand, subArgs, matched.getFlags());
         try {
             Map<String, Object> parsed = ArgumentParser.parse(ctx, matched.getArgs());
             for (Map.Entry<String, Object> e : parsed.entrySet()) ctx.set(e.getKey(), e.getValue());
-            matched.getExecutor().accept(ctx);
+            matched.executeWithMiddleware(ctx);
         } catch (IllegalArgumentException e) {
             if (matched.getUsage() != null) ctx.send("Usage: " + matched.getUsage());
             else ctx.send(e.getMessage());

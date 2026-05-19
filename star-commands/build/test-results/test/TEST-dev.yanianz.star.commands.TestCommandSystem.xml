@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="Command System" tests="8" skipped="0" failures="0" errors="0" timestamp="2026-05-18T11:34:46.441Z" hostname="iYans-MacBook-Air.local" time="0.56">
+<testsuite name="Command System" tests="10" skipped="0" failures="0" errors="0" timestamp="2026-05-19T08:49:28.371Z" hostname="iYans-MacBook-Air.local" time="0.67">
   <properties/>
-  <testcase name="ArgumentParser parses required args" classname="dev.yanianz.star.commands.TestCommandSystem" time="0.013"/>
-  <testcase name="CooldownManager tracks cooldowns" classname="dev.yanianz.star.commands.TestCommandSystem" time="0.542"/>
+  <testcase name="ArgumentParser parses required args" classname="dev.yanianz.star.commands.TestCommandSystem" time="0.017"/>
+  <testcase name="CooldownManager tracks cooldowns" classname="dev.yanianz.star.commands.TestCommandSystem" time="0.645"/>
   <testcase name="ArgumentType parsers work" classname="dev.yanianz.star.commands.TestCommandSystem" time="0.0"/>
-  <testcase name="CommandBuilder builds and validates" classname="dev.yanianz.star.commands.TestCommandSystem" time="0.001"/>
-  <testcase name="CommandBuilder throws without executor" classname="dev.yanianz.star.commands.TestCommandSystem" time="0.0"/>
-  <testcase name="ArgumentParser throws on missing required arg" classname="dev.yanianz.star.commands.TestCommandSystem" time="0.001"/>
+  <testcase name="CommandBuilder builds and validates" classname="dev.yanianz.star.commands.TestCommandSystem" time="0.002"/>
+  <testcase name="CommandBuilder throws without executor" classname="dev.yanianz.star.commands.TestCommandSystem" time="0.001"/>
+  <testcase name="CommandBuilder conditions" classname="dev.yanianz.star.commands.TestCommandSystem" time="0.001"/>
+  <testcase name="ArgumentParser throws on missing required arg" classname="dev.yanianz.star.commands.TestCommandSystem" time="0.0"/>
   <testcase name="CommandContext convenience works" classname="dev.yanianz.star.commands.TestCommandSystem" time="0.0"/>
   <testcase name="ArgumentType enum works" classname="dev.yanianz.star.commands.TestCommandSystem" time="0.001"/>
+  <testcase name="CommandBuilder flags" classname="dev.yanianz.star.commands.TestCommandSystem" time="0.0"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[SLF4J: No SLF4J providers were found.
 SLF4J: Defaulting to no-operation (NOP) logger implementation

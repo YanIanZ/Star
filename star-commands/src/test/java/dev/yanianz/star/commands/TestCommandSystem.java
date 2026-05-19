@@ -110,4 +110,26 @@ class TestCommandSystem {
             new CommandBuilder("bad").arg("x", ArgumentType.STRING).build()
         );
     }
+
+    @Test
+    @DisplayName("CommandBuilder conditions")
+    void commandBuilderConditions() {
+        CommandNode node = new CommandBuilder("test")
+            .playerOnly()
+            .arg("x", ArgumentType.STRING)
+            .executor(ctx -> {})
+            .build();
+        assertFalse(node.getConditions().isEmpty());
+    }
+
+    @Test
+    @DisplayName("CommandBuilder flags")
+    void commandBuilderFlags() {
+        CommandNode node = new CommandBuilder("test")
+            .flag("speed", ArgumentType.DOUBLE, "s")
+            .arg("target", ArgumentType.PLAYER)
+            .executor(ctx -> {})
+            .build();
+        assertEquals(1, node.getFlags().size());
+    }
 }
