@@ -53,19 +53,21 @@ subprojects {
         }
     }
 
-    publishing {
-        publications.create<MavenPublication>("maven") {
-            from(components["java"])
-            groupId = "dev.yanianz"
-            version = rootProject.version.toString()
-        }
-        repositories {
-            maven {
-                name = "GitHubPackages"
-                url = uri("https://maven.pkg.github.com/yanianz/star")
-                credentials {
-                    username = System.getenv("GITHUB_ACTOR") ?: ""
-                    password = System.getenv("GITHUB_TOKEN") ?: ""
+    afterEvaluate {
+        publishing {
+            publications.create<MavenPublication>("maven") {
+                from(if (plugins.hasPlugin("com.gradleup.shadow")) components["shadow"] else components["java"])
+                groupId = "dev.yanianz"
+                version = rootProject.version.toString()
+            }
+            repositories {
+                maven {
+                    name = "GitHubPackages"
+                    url = uri("https://maven.pkg.github.com/yanianz/star")
+                    credentials {
+                        username = System.getenv("GITHUB_ACTOR") ?: ""
+                        password = System.getenv("GITHUB_TOKEN") ?: ""
+                    }
                 }
             }
         }
