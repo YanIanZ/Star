@@ -1,55 +1,35 @@
 package dev.yanianz.star.skins.nms;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
-
-import org.bukkit.block.Block;
-
+import com.destroystokyo.paper.profile.ProfileProperty;
 import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.properties.Property;
+import org.bukkit.Bukkit;
+import org.bukkit.block.Block;
+import org.bukkit.block.Skull;
 
-import dev.yanianz.star.reflection.ReflectionUtils;
-import dev.yanianz.star.versions.UnknownServerVersionException;
+import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.Collection;
 
 class PlayerHeadAdapter17 implements PlayerHeadAdapter {
 
-    private final Constructor<?> newPosition;
-
-    private final Method getHandle;
-    private final Method getTileEntity;
-    private final Method setGameProfile;
-
-    PlayerHeadAdapter17() throws NoSuchMethodException, SecurityException, ClassNotFoundException, UnknownServerVersionException {
-        setGameProfile = ReflectionUtils.getNetMinecraftClass("world.level.block.entity.TileEntitySkull").getMethod("setGameProfile", GameProfile.class);
-        getHandle = ReflectionUtils.getOBCClass("CraftWorld").getMethod("getHandle");
-
-        Class<?> blockPosition = ReflectionUtils.getNetMinecraftClass("core.BlockPosition");
-        newPosition = ReflectionUtils.getConstructor(blockPosition, int.class, int.class, int.class);
-        getTileEntity = ReflectionUtils.getNMSClass("level.WorldServer").getMethod("getTileEntity", blockPosition);
-    }
-
-    @ParametersAreNonnullByDefault
-    private @Nullable Object getTileEntity(Block block) throws IllegalAccessException, InvocationTargetException, InstantiationException {
-        Object world = getHandle.invoke(block.getWorld());
-
-        Object position = newPosition.newInstance(block.getX(), block.getY(), block.getZ());
-        return getTileEntity.invoke(world, position);
-    }
+    private static final String PROPERTY_KEY = "textures";
 
     @Override
     @ParametersAreNonnullByDefault
-    public void setGameProfile(Block block, GameProfile profile, boolean sendBlockUpdate) throws IllegalAccessException, InvocationTargetException, InstantiationException {
-        Object tileEntity = getTileEntity(block);
-        if (tileEntity == null) return;
+    public void setGameProfile(Block block, GameProfile profile, boolean sendBlockUpdate) {
+        if (!(block.getState() instanceof Skull skull)) return;
 
-        setGameProfile.invoke(tileEntity, profile);
+        com.destroystokyo.paper.profile.PlayerProfile playerProfile = Bukkit.createProfile(profile.getId(), profile.getName());
+
+        Collection<Property> textures = profile.getProperties().get(PROPERTY_KEY);
+        if (textures != null && !textures.isEmpty()) {
+            Property texture = textures.iterator().next();
+            playerProfile.setProperty(new ProfileProperty(PROPERTY_KEY, texture.value(), texture.signature()));
+        }
+        skull.setPlayerProfile(playerProfile);
 
         if (sendBlockUpdate) {
-            block.getState().update(true, false);
+            skull.update(true, false);
         }
     }
-
 }
